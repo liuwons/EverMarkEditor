@@ -1,0 +1,11 @@
+*.user
+*.o
+*.tmp
+*.obj
+Makefile*
+/x64
+/release
+/GeneratedFiles
+*.opensdf
+*.sdf
+*.suo
