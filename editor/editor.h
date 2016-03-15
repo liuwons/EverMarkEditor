@@ -13,6 +13,8 @@ public:
     Editor(QSize sz = QSize(0, 0));
 	~Editor();
 
+	void loadContent(QString content);
+
 public slots:
 	void innerTextChanged();
 
@@ -22,9 +24,6 @@ signals:
 private:
 	QVBoxLayout* mainLayout;
 	QTextEdit* textEdit;
-
-
-
 };
 
 #endif // PREVIEW_H

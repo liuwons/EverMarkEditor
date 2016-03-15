@@ -12,6 +12,8 @@
 #include <QMenu>
 #include <QLabel>
 #include <QToolButton>
+#include <QTreeView>
+#include <QFileSystemModel>
 
 class MainWindow : public QMainWindow
 {
@@ -22,12 +24,14 @@ public:
     ~MainWindow();
 
 public slots:
+	void loadFile(QString fpath);
+
 	// From Menu Bar
-	void openFile();
-	void openDir();
-	void save();
-	void saveAs();
-	void close();
+	void openFileFromMenu();
+	void openDirFromMenu();
+	void saveFromMenu();
+	void saveAsFromMenu();
+	void closeFromMenu();
 	void previewWindow();
 	void editorWindow();
 	void dockedWindow();
@@ -36,7 +40,7 @@ public slots:
 
 	// From Tool Bar
 	void previewNow();
-
+	void openFileFromLocalNavigation(const QModelIndex & index);
 
 private:
 	void createUI();
@@ -44,12 +48,18 @@ private:
 	void createToolBar();
 	void createStatusBar();
 
-	QString currentWorkFilePath;
+	QFileSystemModel *localFileModel;
+	QTreeView *localFileTree;
+	QString currentFilePath;
 
     QDockWidget* dockPreview;
     QDockWidget* dockEditor;
 	Preview* preview;
 	Editor* editor;
+
+	QDockWidget* dockNavigation;
+	QDockWidget* dockLocalNavigation;
+	QDockWidget* dockRemoteNavigation;
 
 	// ----------------------Menu Bar-------------------------
 	QMenuBar*  menubar;

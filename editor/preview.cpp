@@ -50,9 +50,11 @@ void Preview::loadCSS()
 	if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		qDebug() << "ERROR: read css file failed.";
+		return;
 	}
 
 	cssString = f.readAll();
+	f.close();
 }
 
 void Preview::updateContent(QString md)

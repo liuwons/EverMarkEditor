@@ -38,11 +38,39 @@ void MainWindow::createUI()
 	dockEditor->setObjectName("editor_dock_widget");
 	editor = new Editor;
 	dockEditor->setWidget(editor);
-	dockEditor->setAllowedAreas(Qt::LeftDockWidgetArea);
 	dockEditor->setFloating(true);
-	addDockWidget(Qt::LeftDockWidgetArea, dockEditor);
+	this->setCentralWidget(dockEditor);
 	
 	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateContent(QString)));
+	
+	localFileModel = new QFileSystemModel;
+	localFileModel->setRootPath(QDir::currentPath());
+	localFileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::AllEntries);
+	localFileTree = new QTreeView();
+	localFileTree->setModel(localFileModel);
+	localFileTree->hideColumn(1);
+	localFileTree->hideColumn(2);
+	localFileTree->hideColumn(3);
+	
+	QWidget* remoteNavigation = new QWidget;
+	QWidget* openedNavigation = new QWidget;
+
+	QVBoxLayout* dockNavigationLayout = new QVBoxLayout;
+	dockNavigationLayout->setMargin(0);
+	dockNavigationLayout->addWidget(localFileTree, 1);
+	dockNavigationLayout->addWidget(remoteNavigation, 1);
+	dockNavigationLayout->addWidget(openedNavigation, 1);
+
+	QWidget* navigationWidget = new QWidget;
+	navigationWidget->setLayout(dockNavigationLayout);
+
+	dockNavigation = new QDockWidget;
+	dockNavigation->setMinimumWidth(screenSize.width() / 7);
+	dockNavigation->setWidget(navigationWidget);
+
+	addDockWidget(Qt::LeftDockWidgetArea, dockNavigation);
+
+	connect(localFileTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openFileFromLocalNavigation(const QModelIndex &)));
 }
 
 
@@ -93,13 +121,13 @@ void MainWindow::createMenu()
 	windowMenu->addAction(previewNowAct);
 	windowMenu->addAction(editorWindowAct);
 
-	connect(openFileAct, SIGNAL(triggered()), this, SLOT(openFile()));
-	connect(openDirAct, SIGNAL(triggered()), this, SLOT(openDir()));
-	connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
+	connect(openFileAct, SIGNAL(triggered()), this, SLOT(openFileFromMenu()));
+	connect(openDirAct, SIGNAL(triggered()), this, SLOT(openDirFromMenu()));
+	connect(exitAct, SIGNAL(triggered()), this, SLOT(closeFromMenu()));
 	connect(previewNowAct, SIGNAL(triggered()), this, SLOT(previewWindow()));
 	connect(editorWindowAct, SIGNAL(triggered()), this, SLOT(editorWindow()));
-	connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
-	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
+	connect(saveAct, SIGNAL(triggered()), this, SLOT(saveFromMenu()));
+	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAsFromMenu()));
 	connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
 }
@@ -131,7 +159,33 @@ void MainWindow::createStatusBar()
 	statusbar->addWidget(lbPosition, 1);
 }
 
-void MainWindow::openFile()
+void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
+{
+	QString fpath = localFileModel->filePath(index);
+	qDebug() << "Open File From Local Navigation:" << fpath;
+	QFileInfo fi(fpath);
+	if (fi.isFile())
+	{
+		loadFile(fpath);
+	}
+}
+
+void MainWindow::loadFile(QString fpath)
+{
+	QFile file(fpath);
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+	{
+		qDebug() << "ERROR: read file failed. " << fpath;
+		return;
+	}
+
+	QString content = file.readAll();
+	file.close();
+
+	editor->loadContent(content);
+}
+
+void MainWindow::openFileFromMenu()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Markdown File"), "/", tr("Markdown Files (*.md)"));
 	if (fileName.length() == 0)
@@ -142,22 +196,22 @@ void MainWindow::openFile()
 }
 
 
-void MainWindow::openDir()
+void MainWindow::openDirFromMenu()
 {
 
 }
 
-void MainWindow::save()
+void MainWindow::saveFromMenu()
 {
 
 }
 
-void MainWindow::saveAs()
+void MainWindow::saveAsFromMenu()
 {
 
 }
 
-void MainWindow::close()
+void MainWindow::closeFromMenu()
 {
 
 }

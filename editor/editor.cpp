@@ -36,3 +36,9 @@ void Editor::innerTextChanged()
 	QString text = textEdit->toPlainText();
 	emit contentChanged(text);
 }
+
+
+void Editor::loadContent(QString content)
+{
+	textEdit->setPlainText(content);
+}

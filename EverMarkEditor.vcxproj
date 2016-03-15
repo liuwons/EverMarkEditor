@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Release|x64">
+    <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
+    <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
@@ -20,29 +20,37 @@
     <ClCompile Include="3rd\heodown\html_smartypants.c" />
     <ClCompile Include="3rd\heodown\stack.c" />
     <ClCompile Include="3rd\heodown\version.c" />
+    <ClCompile Include="Debug\moc_editor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_evernotewidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_preview.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="editor\config.cpp" />
     <ClCompile Include="editor\editor.cpp" />
+    <ClCompile Include="editor\evernotewidget.cpp" />
     <ClCompile Include="editor\main.cpp" />
     <ClCompile Include="editor\mainwindow.cpp" />
     <ClCompile Include="editor\preview.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_editor.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="Release\moc_editor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_mainwindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="Release\moc_evernotewidget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_preview.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_editor.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="Release\moc_preview.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_mainwindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_preview.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="tool\evernotemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\heodown\autolink.h" />
@@ -52,36 +60,139 @@
     <ClInclude Include="3rd\heodown\html.h" />
     <ClInclude Include="3rd\heodown\stack.h" />
     <ClInclude Include="3rd\heodown\version.h" />
+    <ClInclude Include="3rd\python\abstract.h" />
+    <ClInclude Include="3rd\python\asdl.h" />
+    <ClInclude Include="3rd\python\ast.h" />
+    <ClInclude Include="3rd\python\bitset.h" />
+    <ClInclude Include="3rd\python\boolobject.h" />
+    <ClInclude Include="3rd\python\bufferobject.h" />
+    <ClInclude Include="3rd\python\bytearrayobject.h" />
+    <ClInclude Include="3rd\python\bytesobject.h" />
+    <ClInclude Include="3rd\python\bytes_methods.h" />
+    <ClInclude Include="3rd\python\cellobject.h" />
+    <ClInclude Include="3rd\python\ceval.h" />
+    <ClInclude Include="3rd\python\classobject.h" />
+    <ClInclude Include="3rd\python\cobject.h" />
+    <ClInclude Include="3rd\python\code.h" />
+    <ClInclude Include="3rd\python\codecs.h" />
+    <ClInclude Include="3rd\python\compile.h" />
+    <ClInclude Include="3rd\python\complexobject.h" />
+    <ClInclude Include="3rd\python\cStringIO.h" />
+    <ClInclude Include="3rd\python\datetime.h" />
+    <ClInclude Include="3rd\python\descrobject.h" />
+    <ClInclude Include="3rd\python\dictobject.h" />
+    <ClInclude Include="3rd\python\dtoa.h" />
+    <ClInclude Include="3rd\python\enumobject.h" />
+    <ClInclude Include="3rd\python\errcode.h" />
+    <ClInclude Include="3rd\python\eval.h" />
+    <ClInclude Include="3rd\python\fileobject.h" />
+    <ClInclude Include="3rd\python\floatobject.h" />
+    <ClInclude Include="3rd\python\frameobject.h" />
+    <ClInclude Include="3rd\python\funcobject.h" />
+    <ClInclude Include="3rd\python\genobject.h" />
+    <ClInclude Include="3rd\python\graminit.h" />
+    <ClInclude Include="3rd\python\grammar.h" />
+    <ClInclude Include="3rd\python\import.h" />
+    <ClInclude Include="3rd\python\intobject.h" />
+    <ClInclude Include="3rd\python\intrcheck.h" />
+    <ClInclude Include="3rd\python\iterobject.h" />
+    <ClInclude Include="3rd\python\listobject.h" />
+    <ClInclude Include="3rd\python\longintrepr.h" />
+    <ClInclude Include="3rd\python\longobject.h" />
+    <ClInclude Include="3rd\python\marshal.h" />
+    <ClInclude Include="3rd\python\memoryobject.h" />
+    <ClInclude Include="3rd\python\metagrammar.h" />
+    <ClInclude Include="3rd\python\methodobject.h" />
+    <ClInclude Include="3rd\python\modsupport.h" />
+    <ClInclude Include="3rd\python\moduleobject.h" />
+    <ClInclude Include="3rd\python\node.h" />
+    <ClInclude Include="3rd\python\object.h" />
+    <ClInclude Include="3rd\python\objimpl.h" />
+    <ClInclude Include="3rd\python\opcode.h" />
+    <ClInclude Include="3rd\python\osdefs.h" />
+    <ClInclude Include="3rd\python\parsetok.h" />
+    <ClInclude Include="3rd\python\patchlevel.h" />
+    <ClInclude Include="3rd\python\pgen.h" />
+    <ClInclude Include="3rd\python\pgenheaders.h" />
+    <ClInclude Include="3rd\python\pyarena.h" />
+    <ClInclude Include="3rd\python\pycapsule.h" />
+    <ClInclude Include="3rd\python\pyconfig.h" />
+    <ClInclude Include="3rd\python\pyctype.h" />
+    <ClInclude Include="3rd\python\pydebug.h" />
+    <ClInclude Include="3rd\python\pyerrors.h" />
+    <ClInclude Include="3rd\python\pyexpat.h" />
+    <ClInclude Include="3rd\python\pyfpe.h" />
+    <ClInclude Include="3rd\python\pygetopt.h" />
+    <ClInclude Include="3rd\python\pymacconfig.h" />
+    <ClInclude Include="3rd\python\pymactoolbox.h" />
+    <ClInclude Include="3rd\python\pymath.h" />
+    <ClInclude Include="3rd\python\pymem.h" />
+    <ClInclude Include="3rd\python\pyport.h" />
+    <ClInclude Include="3rd\python\pystate.h" />
+    <ClInclude Include="3rd\python\pystrcmp.h" />
+    <ClInclude Include="3rd\python\pystrtod.h" />
+    <ClInclude Include="3rd\python\Python-ast.h" />
+    <ClInclude Include="3rd\python\Python.h" />
+    <ClInclude Include="3rd\python\pythonrun.h" />
+    <ClInclude Include="3rd\python\pythread.h" />
+    <ClInclude Include="3rd\python\py_curses.h" />
+    <ClInclude Include="3rd\python\rangeobject.h" />
+    <ClInclude Include="3rd\python\setobject.h" />
+    <ClInclude Include="3rd\python\sliceobject.h" />
+    <ClInclude Include="3rd\python\stringobject.h" />
+    <ClInclude Include="3rd\python\structmember.h" />
+    <ClInclude Include="3rd\python\structseq.h" />
+    <ClInclude Include="3rd\python\symtable.h" />
+    <ClInclude Include="3rd\python\sysmodule.h" />
+    <ClInclude Include="3rd\python\timefuncs.h" />
+    <ClInclude Include="3rd\python\token.h" />
+    <ClInclude Include="3rd\python\traceback.h" />
+    <ClInclude Include="3rd\python\tupleobject.h" />
+    <ClInclude Include="3rd\python\ucnhash.h" />
+    <ClInclude Include="3rd\python\unicodeobject.h" />
+    <ClInclude Include="3rd\python\warnings.h" />
+    <ClInclude Include="3rd\python\weakrefobject.h" />
     <ClInclude Include="editor\config.h" />
-    <CustomBuild Include="editor\editor.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing editor.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing editor.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
-    </CustomBuild>
+    <ClInclude Include="tool\evernotemanager.h" />
     <CustomBuild Include="editor\preview.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing preview.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing preview.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing preview.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing preview.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
     </CustomBuild>
     <CustomBuild Include="editor\mainwindow.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing mainwindow.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing mainwindow.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-IG:\bin\qt5\5.5\msvc2013_64\include" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013_64\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing mainwindow.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing mainwindow.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+    </CustomBuild>
+    <CustomBuild Include="editor\evernotewidget.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing evernotewidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing evernotewidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+    </CustomBuild>
+    <CustomBuild Include="editor\editor.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing editor.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\debug" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing editor.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG -DQT_WEBKITWIDGETS_LIB  "-I." "-IG:\bin\qt5\5.5\msvc2013\include" "-IG:\bin\qt5\5.5\msvc2013\include\QtWidgets" "-IG:\bin\qt5\5.5\msvc2013\include\QtGui" "-IG:\bin\qt5\5.5\msvc2013\include\QtANGLE" "-IG:\bin\qt5\5.5\msvc2013\include\QtCore" "-I.\release" "-IG:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWebkitWidgets"</Command>
     </CustomBuild>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -90,7 +201,7 @@
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <PlatformToolSet>v120</PlatformToolSet>
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
@@ -99,7 +210,7 @@
     <IntermediateDirectory>release\</IntermediateDirectory>
     <PrimaryOutput>EverMarkEditor</PrimaryOutput>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <PlatformToolSet>v120</PlatformToolSet>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
@@ -110,38 +221,43 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EverMarkEditor</TargetName>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EverMarkEditor</TargetName>
-    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EverMarkEditor</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EverMarkEditor</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)\3rd;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)\3rd;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;G:\bin\qt5\5.5\msvc2013_64\include;G:\bin\qt5\5.5\msvc2013_64\include\QtWidgets;G:\bin\qt5\5.5\msvc2013_64\include\QtGui;G:\bin\qt5\5.5\msvc2013_64\include\QtANGLE;G:\bin\qt5\5.5\msvc2013_64\include\QtCore;release;G:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013;$(QTDIR)\include\QtWebkitWidgets;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;G:\bin\qt5\5.5\msvc2013\include;G:\bin\qt5\5.5\msvc2013\include\QtWidgets;G:\bin\qt5\5.5\msvc2013\include\QtGui;G:\bin\qt5\5.5\msvc2013\include\QtANGLE;G:\bin\qt5\5.5\msvc2013\include\QtCore;release;G:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWebkitWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;QT_WEBKITWIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;QT_WEBKITWIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -149,10 +265,11 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>G:\bin\qt5\5.5\msvc2013_64\lib\qtmain.lib;shell32.lib;G:/bin/qt5/5.5/msvc2013_64/lib\Qt5Core.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Widgets.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Gui.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Core.lib;Qt5WebkitWidgets.lib;Qt5Core.lib;Qt5Gui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>G:\bin\qt5\5.5\msvc2013_64\lib;G:/bin/qt5/5.5/msvc2013_64/lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>G:\bin\qt5\5.5\msvc2013\lib\qtmain.lib;shell32.lib;G:/bin/qt5/5.5/msvc2013/lib\Qt5Core.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Widgets.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Gui.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Core.lib;Qt5Core.lib;Qt5Gui.lib;Qt5WebkitWidgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>G:\bin\qt5\5.5\msvc2013\lib;G:/bin/qt5/5.5/msvc2013/lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -169,12 +286,12 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;G:\bin\qt5\5.5\msvc2013_64\include;G:\bin\qt5\5.5\msvc2013_64\include\QtWidgets;G:\bin\qt5\5.5\msvc2013_64\include\QtGui;G:\bin\qt5\5.5\msvc2013_64\include\QtANGLE;G:\bin\qt5\5.5\msvc2013_64\include\QtCore;debug;G:\bin\qt5\5.5\msvc2013_64\mkspecs\win32-msvc2013;$(QTDIR)\include\QtWebkitWidgets;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;G:\bin\qt5\5.5\msvc2013\include;G:\bin\qt5\5.5\msvc2013\include\QtWidgets;G:\bin\qt5\5.5\msvc2013\include\QtGui;G:\bin\qt5\5.5\msvc2013\include\QtANGLE;G:\bin\qt5\5.5\msvc2013\include\QtCore;debug;G:\bin\qt5\5.5\msvc2013\mkspecs\win32-msvc2013;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWebkitWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -182,7 +299,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_WEBKITWIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_WEBKITWIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -192,8 +309,8 @@
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>G:\bin\qt5\5.5\msvc2013_64\lib\qtmaind.lib;shell32.lib;G:/bin/qt5/5.5/msvc2013_64/lib\Qt5Cored.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Widgetsd.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Guid.lib;G:\bin\qt5\5.5\msvc2013_64\lib\Qt5Cored.lib;Qt5WebkitWidgetsd.lib;Qt5Cored.lib;Qt5Guid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>G:\bin\qt5\5.5\msvc2013_64\lib;G:/bin/qt5/5.5/msvc2013_64/lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>G:\bin\qt5\5.5\msvc2013\lib\qtmaind.lib;shell32.lib;G:/bin/qt5/5.5/msvc2013/lib\Qt5Cored.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Widgetsd.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Guid.lib;G:\bin\qt5\5.5\msvc2013\lib\Qt5Cored.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5WebkitWidgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>G:\bin\qt5\5.5\msvc2013\lib;G:/bin/qt5/5.5/msvc2013/lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -209,14 +326,14 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_x64="msvc2013_64" />
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_Win32="msvc2013" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
