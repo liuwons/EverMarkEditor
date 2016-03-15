@@ -148,10 +148,10 @@ QMap<QString, QString>* EvernoteManager::getNotebookStatus()
 				QString name = obj.value(guid).toString();
 				(*map)[guid] = name;
 			}
+			qDebug() << "[INFO] Get notebook status succeed, notebook count: " << map->size();
 			return map;
 		}
 	}
-
 	return 0;
 }
 
@@ -189,6 +189,7 @@ QMap<QString, QMap<QString, NoteStatus> >* EvernoteManager::getNoteStatus()
 			}
 		}
 	}
+	qDebug() << "[INFO] Get all notes in " << result->size() << " notebooks succeed.";
 	return result;
 }
 

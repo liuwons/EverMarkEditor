@@ -4,6 +4,11 @@
 #include <QDockWidget>
 #include <QFileDialog>
 
+
+#include <QTreeView>
+#include "tool/evernotemanager.h"
+#include "tool/notemodel.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -52,13 +57,39 @@ void MainWindow::createUI()
 	localFileTree->hideColumn(2);
 	localFileTree->hideColumn(3);
 	
-	QWidget* remoteNavigation = new QWidget;
+	EvernoteManager* man = new EvernoteManager(
+		QString("S=s23:U=4e5fbd:E=15ab8c856fd:C=15361172888:P=1cd:A=en-devtoken:V=2:H=e1e63fcf88e8417bfab0c6aeb8ac2c05"),
+		QString("yinxiang"),
+		QString("github"),
+		QString("D:/work/github/EverMarkEditor/release/evermark"),
+		QString("D:/work/github/EverMarkEditor/release/evermark"),
+		QString("sync"));
+	if (!man->init())
+	{
+		qDebug() << "Init failed";
+		exit(0);
+	}
+	if (!man->login())
+	{
+		qDebug() << "Login failed";
+		exit(0);
+	}
+	NoteModel* nm = new NoteModel();
+	bool load = nm->loadFromEvernoteManager(man);
+	if (!load)
+	{
+		qDebug() << "Load evernote model failed";
+		exit(0);
+	}
+	QTreeView* evernoteTreeView = new QTreeView;
+	evernoteTreeView->setModel(nm);
+
 	QWidget* openedNavigation = new QWidget;
 
 	QVBoxLayout* dockNavigationLayout = new QVBoxLayout;
 	dockNavigationLayout->setMargin(0);
 	dockNavigationLayout->addWidget(localFileTree, 1);
-	dockNavigationLayout->addWidget(remoteNavigation, 1);
+	dockNavigationLayout->addWidget(evernoteTreeView, 1);
 	dockNavigationLayout->addWidget(openedNavigation, 1);
 
 	QWidget* navigationWidget = new QWidget;

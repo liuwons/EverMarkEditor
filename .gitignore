@@ -9,3 +9,7 @@ Makefile*
 *.opensdf
 *.sdf
 *.suo
+*.pdb
+*.tlog
+*.idb
+*.log

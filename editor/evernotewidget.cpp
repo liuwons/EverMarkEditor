@@ -3,7 +3,7 @@
 #include <QSize>
 #include <QDebug>
 
-EvernoteWidget::EvernoteWidget(QSize sz)
+EvernoteWidget::EvernoteWidget(QString auth, QString type, QString style, QString root, QString execPath, QString execName, QSize sz)
 {
     if (sz.width() && sz.height())
     {
@@ -12,11 +12,10 @@ EvernoteWidget::EvernoteWidget(QSize sz)
 
 
 	mainLayout = new QVBoxLayout;
-
+	this->manager = new EvernoteManager(auth, type, style, root, execPath, execName);
 	this->setLayout(mainLayout);
-
-	this->manager = new EvernoteManager();
 }
+
 
 EvernoteWidget::~EvernoteWidget()
 {

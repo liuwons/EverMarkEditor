@@ -114,6 +114,15 @@
     <ClCompile Include="tool\evernotemanager.cpp">
       <Filter>tool</Filter>
     </ClCompile>
+    <ClCompile Include="tool\notemodel.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_notemodel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_notemodel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor\config.h">
@@ -432,6 +441,9 @@
     </CustomBuild>
     <CustomBuild Include="editor\preview.h">
       <Filter>editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="tool\notemodel.h">
+      <Filter>tool</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
