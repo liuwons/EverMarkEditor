@@ -4,8 +4,11 @@
 *.obj
 Makefile*
 /x64
+/lib
 /release
+/Debug
 /GeneratedFiles
+/Win32
 *.opensdf
 *.sdf
 *.suo
