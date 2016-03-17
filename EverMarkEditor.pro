@@ -12,7 +12,7 @@ MOC_DIR += GeneratedFiles
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
-RESOURCES += $$PWD/QtAwesome.qrc
+
 include(EverMarkEditor.pri)
 
 

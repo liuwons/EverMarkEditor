@@ -7,6 +7,7 @@
 #include <QModelIndex>
 #include <QVariant>
 
+
 enum NoteType
 {
 	TYPE_NOTEBOOK,
@@ -23,46 +24,11 @@ public:
 	NoteItem* parent;
 	QList<NoteItem*> childs;
 
-	int row()
-	{
-		if (parent)
-			return parent->indexOf(const_cast<NoteItem*>(this));
-
-		return 0;
-	}
-
-	int indexOf(NoteItem* item)
-	{
-		for (int i = 0; i < childs.size(); i++)
-		{
-			if (item == childs.at(i))
-				return i;
-		}
-		return -1;
-	}
-
-	int columnCount()
-	{
-		if (type == TYPE_NOTE)
-			return 2;  // name, mtime
-		else
-			return 1;  // name
-	}
-
-	QVariant data(int col) const
-	{
-		if (col == 0)
-			return name;
-		else if (col == 1 && type == TYPE_NOTE)
-			return mtime;
-		else
-			return QVariant();
-	}
-
-	NoteItem* child(int idx)
-	{
-		return childs.at(idx);
-	}
+	int row();
+	int indexOf(NoteItem*);
+	int columnCount();
+	QVariant  NoteItem::data(int) const;
+	NoteItem* child(int);
 };
 
 class NoteModel : public QAbstractItemModel

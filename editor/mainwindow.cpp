@@ -26,7 +26,6 @@ MainWindow::~MainWindow()
 void MainWindow::createUI()
 {
 	setWindowIcon(awesome->icon(fa::beer));
-	//setWindowIcon(QIcon(":/res/write.png"));
 
 	dockPreview = new QDockWidget(tr("Preview"));
 	dockPreview->setMinimumWidth(screenSize.width() / 3);
@@ -112,20 +111,20 @@ void MainWindow::createMenu()
 
 	fileMenu = menubar->addMenu(tr("File"));
 	openFileAct = new QAction(tr("Open File"), this);
-	openFileAct->setIcon(QIcon(":/res/file.png"));
+	openFileAct->setIcon(awesome->icon(fa::file));
 	openFileAct->setShortcut(QKeySequence::Open);
 	importAct = new QAction(tr("Import"), this);
-	importAct->setIcon(QIcon(":/res/import.png"));
+	importAct->setIcon(awesome->icon(fa::arrowdown));
 	openDirAct = new QAction(tr("Open Folder"), this);
-	openDirAct->setIcon(QIcon(":/res/folder.png"));
+	openDirAct->setIcon(awesome->icon(fa::folderopen));
 	saveAct = new QAction(tr("Save"), this);
-	saveAct->setIcon(QIcon(":/res/save_file.png"));
+	saveAct->setIcon(awesome->icon(fa::save));
 	saveAct->setShortcut(QKeySequence::Save);
 	saveAsAct = new QAction(tr("Save As"), this);
-	saveAsAct->setIcon(QIcon(":/res/save_as.png"));
+	saveAsAct->setIcon(awesome->icon(fa::edit));
 	saveAsAct->setShortcut(QKeySequence::SaveAs);
 	exitAct = new QAction(tr("Exit"), this);
-	exitAct->setIcon(QIcon(":/res/exit.png"));
+	exitAct->setIcon(awesome->icon(fa::close));
 	exitAct->setShortcut(QKeySequence::Quit);
 	fileMenu->addAction(openFileAct);
 	fileMenu->addAction(openDirAct);
@@ -139,17 +138,17 @@ void MainWindow::createMenu()
 
 	helpMenu = menubar->addMenu(tr("Help"));
 	aboutAct = new QAction(tr("About"), this);
-	aboutAct->setIcon(QIcon(":/res/about.png"));
+	aboutAct->setIcon(awesome->icon(fa::info));
 	helpAct = new QAction(tr("Help"), this);
-	helpAct->setIcon(QIcon(":/res/help.png"));
+	helpAct->setIcon(awesome->icon(fa::mortarboard));
 	helpMenu->addAction(aboutAct);
 	helpMenu->addAction(helpAct);
 
 	windowMenu = menubar->addMenu(tr("Window"));
 	previewNowAct = new QAction(tr("Preview"), this);
-	previewNowAct->setIcon(QIcon(":/res/preview.png"));
+	previewNowAct->setIcon(awesome->icon(fa::eye));
 	editorWindowAct = new QAction(tr("Editor"), this);
-	editorWindowAct->setIcon(QIcon(":/res/write.png"));
+	editorWindowAct->setIcon(awesome->icon(fa::code));
 	windowMenu->addAction(previewNowAct);
 	windowMenu->addAction(editorWindowAct);
 
@@ -167,13 +166,14 @@ void MainWindow::createMenu()
 void MainWindow::createToolBar()
 {
 	toolBar = new QToolBar("top toolbar");
-	lbSyncStatus = new QLabel;
-	lbSyncStatus->setPixmap(QPixmap(":/res/synced_yes.png"));
+	lbSyncStatus = new QLabel(QChar(fa::check));
+	lbSyncStatus->setFont(awesome->font(16));
 	toolBar->addWidget(lbSyncStatus);
 	toolBar->addSeparator();
 
-	tbPreviewNow = new QToolButton;
-	tbPreviewNow->setIcon(QIcon(":/res/refresh.png"));
+	tbPreviewNow = new QToolButton();
+	tbPreviewNow->setIcon(awesome->icon(fa::refresh));
+	tbPreviewNow->setIconSize(QSize(16, 16));
 	toolBar->addWidget(tbPreviewNow);
 
 	addToolBar(Qt::TopToolBarArea, toolBar);

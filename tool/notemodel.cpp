@@ -3,6 +3,51 @@
 #include <QStringList>
 #include <QDebug>
 
+
+#include "editor/config.h"
+
+int NoteItem::row()
+{
+	if (parent)
+		return parent->indexOf(const_cast<NoteItem*>(this));
+
+	return 0;
+}
+
+int NoteItem::indexOf(NoteItem* item)
+{
+	for (int i = 0; i < childs.size(); i++)
+	{
+		if (item == childs.at(i))
+			return i;
+	}
+	return -1;
+}
+
+int NoteItem::columnCount()
+{
+	return 2;
+	if (type == TYPE_NOTE)
+		return 2;  // name, mtime
+	else
+		return 1;  // name
+}
+
+NoteItem* NoteItem::child(int idx)
+{
+	return childs.at(idx);
+}
+
+QVariant  NoteItem::data(int col) const
+{
+	if (col == 0)
+		return name;
+	else if (col == 1 && type == TYPE_NOTE)
+		return mtime;
+	else 
+		return QVariant();
+}
+
 NoteModel::NoteModel(QObject *parent) : QAbstractItemModel(parent)
 {
 }
@@ -26,10 +71,21 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid())
 		return QVariant();
 
+	NoteItem *item = static_cast<NoteItem*>(index.internalPointer());
+
+	if (role == Qt::DecorationRole)
+	{
+		if (index.column() != 0)
+			return QVariant();
+		if (item->type == TYPE_NOTE)
+			return awesome->icon(fa::file);
+		else if (item->type == TYPE_NOTEBOOK)
+			return awesome->icon(fa::book);
+	}
+
 	if (role != Qt::DisplayRole)
 		return QVariant();
-
-	NoteItem *item = static_cast<NoteItem*>(index.internalPointer());
+	
 	QVariant var = item->data(index.column());
 	return  var;
 }
@@ -101,39 +157,6 @@ int NoteModel::rowCount(const QModelIndex &parent) const
 
 bool NoteModel::loadFromEvernoteManager(EvernoteManager* manager)
 {
-	/*header.append(QString("Evernote"));
-	header.append(QString("Modify Time"));
-	root = new NoteItem;
-	root->type = TYPE_NOTEBOOK;
-	root->name = "My Account";
-	for (int i = 0; i < 5; i++)
-	{
-		QString notebookGuid = "123";
-		QString notebookName = "test";
-
-		NoteItem* notebook = new NoteItem;
-		notebook->id = notebookGuid;
-		notebook->name = notebookName;
-		notebook->type = TYPE_NOTEBOOK;
-		notebook->parent = root;
-		root->childs.append(notebook);
-
-		for (int k = 0; k < 3; k++)
-		{
-			QString guid = "12345678";
-			NoteItem* note = new NoteItem;
-			note->id = guid;
-			note->name = "test title";
-			note->mtime = "2012-12-21 12:00:00";
-			note->type = TYPE_NOTE;
-			note->parent = notebook;
-
-			notebook->childs.append(note);
-		}
-	}
-	return true;*/
-
-	//---------------test---------------s
 	if (!manager)
 		return false;
 
