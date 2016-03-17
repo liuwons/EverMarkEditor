@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/about.png</file>
+        <file>res/exit.png</file>
+        <file>res/file.png</file>
+        <file>res/folder.png</file>
+        <file>res/help.png</file>
+        <file>res/import.png</file>
+        <file>res/preview.png</file>
+        <file>res/refresh.png</file>
+        <file>res/save_as.png</file>
+        <file>res/save_file.png</file>
+        <file>res/settings.png</file>
+        <file>res/synced_no.png</file>
+        <file>res/synced_yes.png</file>
+        <file>res/warn.png</file>
+        <file>res/write.png</file>
+    </qresource>
+</RCC>

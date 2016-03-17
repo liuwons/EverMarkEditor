@@ -16,3 +16,6 @@ Makefile*
 *.tlog
 *.idb
 *.log
+*.vcxproj
+*.filters
+*.sln

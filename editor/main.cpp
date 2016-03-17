@@ -27,6 +27,14 @@ void setStyle()
 	qApp->setStyleSheet(content);
 }
 
+void initFontAwesome()
+{
+	qDebug() << "Start init FontAwesome";
+	awesome = new QtAwesome(qApp);
+	awesome->initFontAwesome();
+	qDebug() << "End init FontAwesome";
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -93,6 +101,7 @@ int main(int argc, char *argv[])
 	//qApp->setStyleSheet("QTextEdit{font: 12pt helvetica,arial,freesans,clean,sans-serif; color:#ffffff; background-color: #1e1e1e;}");
 	
 	setStyle();
+	initFontAwesome();
 	//qApp->setStyleSheet("QTextEdit{font: 12pt concolas; color:#ffffff; background-color: #1e1e1e;}");
 
 
