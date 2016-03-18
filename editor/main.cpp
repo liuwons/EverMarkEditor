@@ -29,10 +29,8 @@ void setStyle()
 
 void initFontAwesome()
 {
-	qDebug() << "Start init FontAwesome";
 	awesome = new QtAwesome(qApp);
 	awesome->initFontAwesome();
-	qDebug() << "End init FontAwesome";
 }
 
 int main(int argc, char *argv[])

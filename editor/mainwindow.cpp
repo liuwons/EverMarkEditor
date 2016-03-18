@@ -8,6 +8,7 @@
 #include <QTreeView>
 #include "tool/evernotemanager.h"
 #include "tool/notemodel.h"
+#include "emfilesystemmodel.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -48,7 +49,7 @@ void MainWindow::createUI()
 	
 	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateContent(QString)));
 	
-	localFileModel = new QFileSystemModel;
+	localFileModel = new EMFileSystemModel;
 	localFileModel->setRootPath(QDir::currentPath());
 	localFileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::AllEntries);
 	localFileTree = new QTreeView();

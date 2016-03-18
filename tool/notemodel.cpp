@@ -78,7 +78,7 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 		if (index.column() != 0)
 			return QVariant();
 		if (item->type == TYPE_NOTE)
-			return awesome->icon(fa::file);
+			return awesome->icon(fa::filetext);
 		else if (item->type == TYPE_NOTEBOOK)
 			return awesome->icon(fa::book);
 	}

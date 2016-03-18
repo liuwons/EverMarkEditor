@@ -9,6 +9,7 @@ Makefile*
 /Debug
 /GeneratedFiles
 /Win32
+*.pyc
 *.opensdf
 *.sdf
 *.suo
