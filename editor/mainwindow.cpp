@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 #include <QFileDialog>
-
+#include <QTabWidget>
 
 #include <QTreeView>
 #include "tool/evernotemanager.h"
@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 	createMenu();
 	createToolBar();
 	createStatusBar();
+	createNavigation();
 }
 
 MainWindow::~MainWindow()
@@ -49,6 +50,11 @@ void MainWindow::createUI()
 	
 	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateContent(QString)));
 	
+	
+}
+
+void MainWindow::createNavigation()
+{
 	localFileModel = new EMFileSystemModel;
 	localFileModel->setRootPath(QDir::currentPath());
 	localFileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::AllEntries);
@@ -57,7 +63,7 @@ void MainWindow::createUI()
 	localFileTree->hideColumn(1);
 	localFileTree->hideColumn(2);
 	localFileTree->hideColumn(3);
-	
+
 	EvernoteManager* man = new EvernoteManager(
 		QString("S=s23:U=4e5fbd:E=15ab8c856fd:C=15361172888:P=1cd:A=en-devtoken:V=2:H=e1e63fcf88e8417bfab0c6aeb8ac2c05"),
 		QString("yinxiang"),
@@ -67,19 +73,16 @@ void MainWindow::createUI()
 		QString("sync"));
 	if (!man->init())
 	{
-		qDebug() << "Init failed";
 		exit(0);
 	}
 	if (!man->login())
 	{
-		qDebug() << "Login failed";
 		exit(0);
 	}
 	NoteModel* nm = new NoteModel();
 	bool load = nm->loadFromEvernoteManager(man);
 	if (!load)
 	{
-		qDebug() << "Load evernote model failed";
 		exit(0);
 	}
 	QTreeView* evernoteTreeView = new QTreeView;
@@ -87,17 +90,21 @@ void MainWindow::createUI()
 
 	QWidget* openedNavigation = new QWidget;
 
+	QTabWidget* tab = new QTabWidget;
+	tab->setTabPosition(QTabWidget::South);
+	tab->addTab(localFileTree, "File System");
+	tab->addTab(evernoteTreeView, "Evernote");
+	tab->addTab(openedNavigation, "Workbench");
+
 	QVBoxLayout* dockNavigationLayout = new QVBoxLayout;
 	dockNavigationLayout->setMargin(0);
-	dockNavigationLayout->addWidget(localFileTree, 1);
-	dockNavigationLayout->addWidget(evernoteTreeView, 1);
-	dockNavigationLayout->addWidget(openedNavigation, 1);
+	dockNavigationLayout->addWidget(tab);
 
 	QWidget* navigationWidget = new QWidget;
 	navigationWidget->setLayout(dockNavigationLayout);
 
 	dockNavigation = new QDockWidget;
-	dockNavigation->setMinimumWidth(screenSize.width() / 7);
+	dockNavigation->setMinimumWidth(screenSize.width() / 5);
 	dockNavigation->setWidget(navigationWidget);
 
 	addDockWidget(Qt::LeftDockWidgetArea, dockNavigation);
@@ -195,7 +202,6 @@ void MainWindow::createStatusBar()
 void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
 {
 	QString fpath = localFileModel->filePath(index);
-	qDebug() << "Open File From Local Navigation:" << fpath;
 	QFileInfo fi(fpath);
 	if (fi.isFile())
 	{

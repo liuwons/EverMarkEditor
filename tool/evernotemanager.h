@@ -21,7 +21,7 @@ public:
 	EvernoteManager(QString auth, QString type, QString style, QString root, QString execPath, QString execName);
 	bool init();
 	bool login();
-	QMap<QString, QString>* getNotebookStatus();
+	QMap<QString, QMap<QString, QString> >* getNotebookStatus();
 	QMap<QString, QMap<QString, NoteStatus> >* getNoteStatus();
 	bool createNotebook(QString name);
 	bool createNote(QString notebookGuid, QString title, QString content, bool isMarkdown);

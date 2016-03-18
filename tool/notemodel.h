@@ -10,6 +10,7 @@
 
 enum NoteType
 {
+	TYPE_STACK,
 	TYPE_NOTEBOOK,
 	TYPE_NOTE
 };
@@ -29,6 +30,7 @@ public:
 	int columnCount();
 	QVariant  NoteItem::data(int) const;
 	NoteItem* child(int);
+	int getChildNamed(QString) const;
 };
 
 class NoteModel : public QAbstractItemModel

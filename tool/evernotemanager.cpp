@@ -126,7 +126,7 @@ bool EvernoteManager::login()
 	return false;
 }
 
-QMap<QString, QString>* EvernoteManager::getNotebookStatus()
+QMap<QString, QMap<QString, QString> >* EvernoteManager::getNotebookStatus()
 {
 
 	PyObject* args = Py_BuildValue("()");
@@ -136,7 +136,7 @@ QMap<QString, QString>* EvernoteManager::getNotebookStatus()
 		char* result = PyString_AsString(pRet);
 		if (result)
 		{
-			QMap<QString, QString>* map = new QMap<QString, QString>();
+			QMap<QString, QMap<QString, QString> >* map = new QMap<QString, QMap<QString, QString> >();
 
 			QJsonParseError err;
 			QJsonDocument doc = QJsonDocument::fromJson(result, &err);
@@ -145,8 +145,13 @@ QMap<QString, QString>* EvernoteManager::getNotebookStatus()
 			for (int i = 0; i < keys.size(); i++)
 			{
 				QString guid = keys.at(i);
-				QString name = obj.value(guid).toString();
-				(*map)[guid] = name;
+				QJsonObject notebook = obj.value(guid).toObject();
+				QString name = notebook.value("name").toString();
+				QString stack = notebook.value("stack").toString();
+				QMap<QString, QString> nb;
+				nb["name"] = name;
+				nb["stack"] = stack;
+				(*map)[guid] = nb;
 			}
 			qDebug() << "[INFO] Get notebook status succeed, notebook count: " << map->size();
 			return map;

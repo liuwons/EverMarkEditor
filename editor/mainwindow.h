@@ -47,6 +47,7 @@ private:
 	void createMenu();
 	void createToolBar();
 	void createStatusBar();
+	void createNavigation();
 
 	QFileSystemModel *localFileModel;
 	QTreeView *localFileTree;

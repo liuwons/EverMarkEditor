@@ -66,8 +66,11 @@ class EverMark(object):
         self.notebooks = self.note_store.listNotebooks()
         notebooks = {}
         for notebook in self.notebooks:
+            notebook_stack = ''
+            if notebook.stack is not None:
+                notebook_stack = notebook.stack.decode('utf-8')
             notebook_name = notebook.name.decode('utf-8')
-            notebooks[notebook.guid] = notebook_name
+            notebooks[notebook.guid] = {'name': notebook_name, 'stack': notebook_stack}
         return json.dumps(notebooks).encode('utf-8')
 
     def get_note_status(self):
