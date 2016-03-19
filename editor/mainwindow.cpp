@@ -9,15 +9,17 @@
 #include "tool/evernotemanager.h"
 #include "tool/notemodel.h"
 #include "emfilesystemmodel.h"
+#include "settingdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 	createUI();
-	createMenu();
 	createToolBar();
+	createMenu();
 	createStatusBar();
 	createNavigation();
+	updateEvernoteNavigation();
 }
 
 MainWindow::~MainWindow()
@@ -27,8 +29,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::createUI()
 {
-	setWindowIcon(awesome->icon(fa::beer));
-
 	dockPreview = new QDockWidget(tr("Preview"));
 	dockPreview->setMinimumWidth(screenSize.width() / 3);
 	dockPreview->setMinimumHeight(screenSize.height() / 3*2);
@@ -49,8 +49,39 @@ void MainWindow::createUI()
 	this->setCentralWidget(dockEditor);
 	
 	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateContent(QString)));
-	
-	
+}
+
+void MainWindow::updateEvernoteNavigation()
+{
+	if (! evernoteToken)
+	{
+		return;
+	}
+
+	if (evernoteManager)
+		delete evernoteManager;
+
+	evernoteManager = new EvernoteManager(
+		*evernoteToken,
+		QString("yinxiang"),
+		QString("github"),
+		QString("D:/work/github/EverMarkEditor/release/evermark"),
+		QString("D:/work/github/EverMarkEditor/release/evermark"),
+		QString("sync"));
+	if (!evernoteManager->init())
+	{
+		return;
+	}
+	if (!evernoteManager->login())
+	{
+		return;
+	}
+	bool load = evernoteModel->loadFromEvernoteManager(evernoteManager);
+	if (!load)
+	{
+		return;
+	}
+	evernoteTree->setModel(evernoteModel);
 }
 
 void MainWindow::createNavigation()
@@ -64,37 +95,16 @@ void MainWindow::createNavigation()
 	localFileTree->hideColumn(2);
 	localFileTree->hideColumn(3);
 
-	EvernoteManager* man = new EvernoteManager(
-		QString("S=s23:U=4e5fbd:E=15ab8c856fd:C=15361172888:P=1cd:A=en-devtoken:V=2:H=e1e63fcf88e8417bfab0c6aeb8ac2c05"),
-		QString("yinxiang"),
-		QString("github"),
-		QString("D:/work/github/EverMarkEditor/release/evermark"),
-		QString("D:/work/github/EverMarkEditor/release/evermark"),
-		QString("sync"));
-	if (!man->init())
-	{
-		exit(0);
-	}
-	if (!man->login())
-	{
-		exit(0);
-	}
-	NoteModel* nm = new NoteModel();
-	bool load = nm->loadFromEvernoteManager(man);
-	if (!load)
-	{
-		exit(0);
-	}
-	QTreeView* evernoteTreeView = new QTreeView;
-	evernoteTreeView->setModel(nm);
-
-	QWidget* openedNavigation = new QWidget;
+	evernoteTree = new QTreeView;
+	evernoteModel = new NoteModel;
+	workbenchTree = new QTreeView;
+	evernoteManager = 0;
 
 	QTabWidget* tab = new QTabWidget;
 	tab->setTabPosition(QTabWidget::South);
-	tab->addTab(localFileTree, "File System");
-	tab->addTab(evernoteTreeView, "Evernote");
-	tab->addTab(openedNavigation, "Workbench");
+	tab->addTab(localFileTree, tr("File System"));
+	tab->addTab(evernoteTree, tr("Evernote"));
+	tab->addTab(workbenchTree, tr("Workbench"));
 
 	QVBoxLayout* dockNavigationLayout = new QVBoxLayout;
 	dockNavigationLayout->setMargin(0);
@@ -152,23 +162,29 @@ void MainWindow::createMenu()
 	helpMenu->addAction(aboutAct);
 	helpMenu->addAction(helpAct);
 
-	windowMenu = menubar->addMenu(tr("Window"));
+	viewMenu = menubar->addMenu(tr("View"));
 	previewNowAct = new QAction(tr("Preview"), this);
 	previewNowAct->setIcon(awesome->icon(fa::eye));
-	editorWindowAct = new QAction(tr("Editor"), this);
-	editorWindowAct->setIcon(awesome->icon(fa::code));
-	windowMenu->addAction(previewNowAct);
-	windowMenu->addAction(editorWindowAct);
+	editorViewAct = new QAction(tr("Editor"), this);
+	editorViewAct->setIcon(awesome->icon(fa::code));
+	viewMenu->addAction(previewNowAct);
+	viewMenu->addAction(editorViewAct);
+
+	windowMenu = menubar->addMenu(tr("Window"));
+	settingAct = new QAction(tr("Setting"), this);
+	settingAct->setIcon(awesome->icon(fa::gears));
+	windowMenu->addAction(settingAct);
 
 	connect(openFileAct, SIGNAL(triggered()), this, SLOT(openFileFromMenu()));
 	connect(openDirAct, SIGNAL(triggered()), this, SLOT(openDirFromMenu()));
 	connect(exitAct, SIGNAL(triggered()), this, SLOT(closeFromMenu()));
-	connect(previewNowAct, SIGNAL(triggered()), this, SLOT(previewWindow()));
-	connect(editorWindowAct, SIGNAL(triggered()), this, SLOT(editorWindow()));
+	connect(previewNowAct, SIGNAL(triggered()), this, SLOT(previewView()));
+	connect(editorViewAct, SIGNAL(triggered()), this, SLOT(editorView()));
 	connect(saveAct, SIGNAL(triggered()), this, SLOT(saveFromMenu()));
 	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAsFromMenu()));
 	connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 	connect(helpAct, SIGNAL(triggered()), this, SLOT(help()));
+	connect(settingAct, SIGNAL(triggered()), this, SLOT(setting()));
 }
 
 void MainWindow::createToolBar()
@@ -255,12 +271,12 @@ void MainWindow::closeFromMenu()
 
 }
 
-void MainWindow::previewWindow()
+void MainWindow::previewView()
 {
 
 }
 
-void MainWindow::editorWindow()
+void MainWindow::editorView()
 {
 
 }
@@ -284,4 +300,10 @@ void MainWindow::help()
 void MainWindow::previewNow()
 {
 
+}
+
+void MainWindow::setting()
+{
+	SettingDialog* sd = new SettingDialog;
+	sd->exec();
 }

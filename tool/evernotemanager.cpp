@@ -35,66 +35,50 @@ bool EvernoteManager::init()
 	PyObject* pModule = PyImport_Import(moduleName);
 	if (!pModule) 
 	{
-		qDebug() << "[ERROR] Python get module failed.";
 		return false;
 	}
-	qDebug() << "[INFO] Python get module succeed.";
 
 	handleInit = PyObject_GetAttrString(pModule, "init");
 	if (!handleInit || !PyCallable_Check(handleInit)) 
 	{
-		qDebug() << "[ERROR] Can't find funftion (init)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (init) succeed.";
 
 	handleLogin = PyObject_GetAttrString(pModule, "login");
 	if (!handleLogin || !PyCallable_Check(handleLogin))
 	{
-		qDebug() << "[ERROR] Can't find funftion (login)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (login) succeed.";
 
 	handleGetNotebookStatus = PyObject_GetAttrString(pModule, "get_notebook_status");
 	if (!handleGetNotebookStatus || !PyCallable_Check(handleGetNotebookStatus))
 	{
-		qDebug() << "[ERROR] Can't find funftion (get_notebook_status)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (get_notebook_status) succeed.";
 
 	handleGetNoteStatus = PyObject_GetAttrString(pModule, "get_note_status");
 	if (!handleGetNoteStatus || !PyCallable_Check(handleGetNoteStatus))
 	{
-		qDebug() << "[ERROR] Can't find funftion (get_note_status)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (get_note_status) succeed.";
 
 	handleCreateNotebook = PyObject_GetAttrString(pModule, "create_notebook");
 	if (!handleCreateNotebook || !PyCallable_Check(handleCreateNotebook))
 	{
-		qDebug() << "[ERROR] Can't find funftion (create_notebook)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (create_notebook) succeed.";
 
 	handleCreateNote = PyObject_GetAttrString(pModule, "create_note");
 	if (!handleCreateNote || !PyCallable_Check(handleCreateNote))
 	{
-		qDebug() << "[ERROR] Can't find funftion (create_note)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (create_note) succeed.";
 
 	handleUpdateNote = PyObject_GetAttrString(pModule, "update_note");
 	if (!handleUpdateNote || !PyCallable_Check(handleUpdateNote))
 	{
-		qDebug() << "[ERROR] Can't find funftion (update_note)";
 		return false;
 	}
-	qDebug() << "[INFO] Get function (update_note) succeed.";
 
 	std::string str_auth = this->authToken.toStdString();
 	std::string str_type = this->accountType.toStdString();
@@ -153,7 +137,6 @@ QMap<QString, QMap<QString, QString> >* EvernoteManager::getNotebookStatus()
 				nb["stack"] = stack;
 				(*map)[guid] = nb;
 			}
-			qDebug() << "[INFO] Get notebook status succeed, notebook count: " << map->size();
 			return map;
 		}
 	}
@@ -194,7 +177,6 @@ QMap<QString, QMap<QString, NoteStatus> >* EvernoteManager::getNoteStatus()
 			}
 		}
 	}
-	qDebug() << "[INFO] Get all notes in " << result->size() << " notebooks succeed.";
 	return result;
 }
 

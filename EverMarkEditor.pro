@@ -25,3 +25,6 @@ HEADERS += 3rd/awesome/QtAwesome.h \
     3rd/awesome/QtAwesomeAnim.h
     
 RESOURCES += 3rd/awesome/QtAwesome.qrc
+
+TRANSLATIONS = EverMarkEditor_zh.ts \
+    EverMarkEditor_en.ts

@@ -6,54 +6,6 @@
 
 #include "editor/config.h"
 
-int NoteItem::row()
-{
-	if (parent)
-		return parent->indexOf(const_cast<NoteItem*>(this));
-
-	return 0;
-}
-
-int NoteItem::indexOf(NoteItem* item)
-{
-	for (int i = 0; i < childs.size(); i++)
-	{
-		if (item == childs.at(i))
-			return i;
-	}
-	return -1;
-}
-
-int NoteItem::columnCount()
-{
-	return 1;
-}
-
-
-int NoteItem::getChildNamed(QString strName) const
-{
-	for (int i = 0; i < childs.size(); i++)
-	{
-		if (strName.compare(childs.at(i)->name) == 0)
-			return i;
-	}
-	return -1;
-}
-
-NoteItem* NoteItem::child(int idx)
-{
-	return childs.at(idx);
-}
-
-QVariant  NoteItem::data(int col) const
-{
-	if (col == 0)
-		return name;
-	else if (col == 1 && type == TYPE_NOTE)
-		return mtime;
-	else 
-		return QVariant();
-}
 
 NoteModel::NoteModel(QObject *parent) : QAbstractItemModel(parent)
 {
@@ -85,7 +37,7 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 		if (index.column() != 0)
 			return QVariant();
 		if (item->type == TYPE_NOTE)
-			return awesome->icon(fa::filetext);
+			return awesome->icon(fa::filecodeo);
 		else if (item->type == TYPE_NOTEBOOK)
 			return awesome->icon(fa::book);
 		else if (item->type == TYPE_STACK)
@@ -177,12 +129,11 @@ bool NoteModel::loadFromEvernoteManager(EvernoteManager* manager)
 	if (!noteStatus)
 		return false;
 
-	header.append(QString("Evernote"));
-	//header.append(QString("Modify Time"));
+	header.append(tr("Evernote"));
 
 	root = new NoteItem;
 	root->type = TYPE_NOTEBOOK;
-	root->name = "My Account";
+	root->name = tr("My Account");
 
 	QList<QString> notebookGuids = notebookStatus->keys();
 	for (int i = 0; i < notebookGuids.size(); i++)

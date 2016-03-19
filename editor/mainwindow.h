@@ -3,6 +3,8 @@
 
 #include "preview.h"
 #include "editor.h"
+#include "tool/evernotemanager.h"
+#include "tool/notemodel.h"
 
 #include <QMainWindow>
 #include <QMenuBar>
@@ -32,15 +34,18 @@ public slots:
 	void saveFromMenu();
 	void saveAsFromMenu();
 	void closeFromMenu();
-	void previewWindow();
-	void editorWindow();
+	void previewView();
+	void editorView();
 	void dockedWindow();
 	void about();
 	void help();
+	void setting();
 
 	// From Tool Bar
 	void previewNow();
 	void openFileFromLocalNavigation(const QModelIndex & index);
+
+	void updateEvernoteNavigation();
 
 private:
 	void createUI();
@@ -49,8 +54,13 @@ private:
 	void createStatusBar();
 	void createNavigation();
 
-	QFileSystemModel *localFileModel;
-	QTreeView *localFileTree;
+	EvernoteManager* evernoteManager;
+
+	NoteModel* evernoteModel;
+	QTreeView* evernoteTree;
+	QFileSystemModel* localFileModel;
+	QTreeView* localFileTree;
+	QTreeView* workbenchTree;
 	QString currentFilePath;
 
     QDockWidget* dockPreview;
@@ -77,9 +87,12 @@ private:
 	QAction* aboutAct;
 	QAction* helpAct;
 
+	QMenu* viewMenu;
+	QAction* previewViewAct;
+	QAction* editorViewAct;
+
 	QMenu* windowMenu;
-	QAction* previewWindowAct;
-	QAction* editorWindowAct;
+	QAction* settingAct;
 	//-----------------------Menu Bar-------------------------
 
 

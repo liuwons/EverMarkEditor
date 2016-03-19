@@ -1,5 +1,6 @@
 #include <QSize>
 #include <QString>
+#include <QSettings>
 
 #include "awesome/QtAwesome.h"
 
@@ -8,4 +9,9 @@ QString theme = "github";
 QString appDir;
 QString cssSubDir = "css";
 
-QtAwesome* awesome;
+QtAwesome* awesome = 0;
+
+QSettings* settings = 0;
+
+QString* workbenchPath = 0;
+QString* evernoteToken = 0;

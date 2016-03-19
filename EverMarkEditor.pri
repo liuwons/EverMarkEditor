@@ -3,6 +3,8 @@ HEADERS += ./editor/config.h \
     ./editor/mainwindow.h \
     ./editor/evernotewidget.h \
     ./editor/editor.h \
+    ./editor/emfilesystemmodel.h \
+    ./editor/settingdialog.h \
     ./3rd/heodown/autolink.h \
     ./3rd/heodown/buffer.h \
     ./3rd/heodown/document.h \
@@ -103,7 +105,9 @@ HEADERS += ./editor/config.h \
     ./3rd/python/warnings.h \
     ./3rd/python/weakrefobject.h \
     ./tool/evernotemanager.h \
+    ./tool/workbenchmanager.h \
     ./tool/notemodel.h \
+    ./tool/noteitem.h \
     ./3rd/awesome/QtAwesome.h \
     ./3rd/awesome/QtAwesomeAnim.h
 
@@ -113,6 +117,8 @@ SOURCES += ./editor/main.cpp \
     ./editor/evernotewidget.cpp \
     ./editor/mainwindow.cpp \
     ./editor/preview.cpp \
+    ./editor/emfilesystemmodel.cpp \
+    ./editor/settingdialog.cpp \
     ./3rd/heodown/autolink.c \
     ./3rd/heodown/buffer.c \
     ./3rd/heodown/document.c \
@@ -123,6 +129,8 @@ SOURCES += ./editor/main.cpp \
     ./3rd/heodown/stack.c \
     ./3rd/heodown/version.c \
     ./tool/evernotemanager.cpp \
+    ./tool/workbenchmanager.cpp \
     ./tool/notemodel.cpp \
+    ./tool/noteitem.cpp \
     ./3rd/awesome/QtAwesome.cpp \
     ./3rd/awesome/QtAwesomeAnim.cpp
