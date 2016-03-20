@@ -7,7 +7,6 @@
 
 #include "awesome/QtAwesome.h"
 
-
 const QString CONFIG_STRING_WORKBENCH_PATH = "workbench_path";
 const QString CONFIG_STRING_EVERNOTE_TOKEN = "evernote_token";
 
@@ -22,5 +21,8 @@ extern QSettings* settings;
 
 extern QString* workbenchPath;
 extern QString* evernoteToken;
+extern QString* evernoteAccountType;
+
+extern QString* markdownTheme;
 #endif // CONFIG_H
 

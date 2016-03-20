@@ -15,3 +15,6 @@ QSettings* settings = 0;
 
 QString* workbenchPath = 0;
 QString* evernoteToken = 0;
+QString* evernoteAccountType;
+
+QString* markdownTheme;

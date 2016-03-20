@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QComboBox>
 #include <QPushButton>
 
 class SettingDialog : public QDialog
@@ -15,6 +16,7 @@ class SettingDialog : public QDialog
 
 public:
 	SettingDialog();
+	~SettingDialog();
 
 public slots:
 	void setEvernoteToken();
@@ -23,9 +25,12 @@ private:
 	QVBoxLayout* mainLayout;
 
 	QWidget* wgEvernote;
+	QVBoxLayout* evernoteLayout;
 	QHBoxLayout* evernoteTokenLayout;
 	QLabel* lbEvernoteToken;
 	QLineEdit* editEvernoteToken;
+	QComboBox* cbEvernoteAccountType;
+	QComboBox* cbMarkdownTheme;
 	QPushButton* btEvernoteToken;
 };
 

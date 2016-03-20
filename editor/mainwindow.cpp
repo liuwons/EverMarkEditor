@@ -4,6 +4,7 @@
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QTabWidget>
+#include <QApplication>
 
 #include <QTreeView>
 #include "tool/evernotemanager.h"
@@ -60,13 +61,12 @@ void MainWindow::updateEvernoteNavigation()
 
 	if (evernoteManager)
 		delete evernoteManager;
-
 	evernoteManager = new EvernoteManager(
 		*evernoteToken,
 		QString("yinxiang"),
 		QString("github"),
-		QString("D:/work/github/EverMarkEditor/release/evermark"),
-		QString("D:/work/github/EverMarkEditor/release/evermark"),
+		appDir + "/evermark",
+		appDir + "/evermark",
 		QString("sync"));
 	if (!evernoteManager->init())
 	{
@@ -306,4 +306,5 @@ void MainWindow::setting()
 {
 	SettingDialog* sd = new SettingDialog;
 	sd->exec();
+	delete sd;
 }
