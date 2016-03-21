@@ -31,7 +31,7 @@ private:
 	QLineEdit* editEvernoteToken;
 	QComboBox* cbEvernoteAccountType;
 	QComboBox* cbMarkdownTheme;
-	QPushButton* btEvernoteToken;
+	QPushButton* btConfirm;
 };
 
 #endif

@@ -17,12 +17,7 @@ NoteModel::~NoteModel()
 
 int NoteModel::columnCount(const QModelIndex &parent) const
 {
-	int count = 0;
-	if (parent.isValid())
-		count = static_cast<NoteItem*>(parent.internalPointer())->columnCount();
-	else
-		count = root->columnCount();
-	return count;
+	return 1;
 }
 
 QVariant NoteModel::data(const QModelIndex &index, int role) const
@@ -43,12 +38,18 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 		else if (item->type == TYPE_STACK)
 			return awesome->icon(fa::folder);
 	}
+	else if (role == Qt::DisplayRole)
+	{
+		int col = index.column();
+		if (col == 0)
+			return item->name;
+		else if (col == 1 && item->type == TYPE_NOTE)
+			return item->mtime;
+		else
+			return QVariant();
+	}
 
-	if (role != Qt::DisplayRole)
-		return QVariant();
-	
-	QVariant var = item->data(index.column());
-	return  var;
+	return QVariant();
 }
 
 Qt::ItemFlags NoteModel::flags(const QModelIndex &index) const
@@ -81,7 +82,7 @@ QModelIndex NoteModel::index(int row, int column, const QModelIndex &parent) con
 	else
 		parentItem = static_cast<NoteItem*>(parent.internalPointer());
 
-	NoteItem *childItem = parentItem->child(row);
+	NoteItem *childItem = parentItem->childs.at(row);
 	if (childItem)
 		return createIndex(row, column, childItem);
 	else
@@ -96,10 +97,22 @@ QModelIndex NoteModel::parent(const QModelIndex &index) const
 	NoteItem *childItem = static_cast<NoteItem*>(index.internalPointer());
 	NoteItem *parentItem = childItem->parent;
 
-	if (parentItem == root)
+	if (parentItem == 0)
 		return QModelIndex();
 
-	return createIndex(parentItem->row(), 0, parentItem);
+	int row = -1;
+	for (int i = 0; i < parentItem->childs.size(); i++)
+	{
+		if (childItem == parentItem->childs.at(i))
+		{
+			row = i;
+			break;
+		}
+	}
+	if (row >= 0)
+		return createIndex(row, 0, parentItem);
+	else
+		return QModelIndex();
 }
 
 int NoteModel::rowCount(const QModelIndex &parent) const
@@ -131,62 +144,7 @@ bool NoteModel::loadFromEvernoteManager(EvernoteManager* manager)
 
 	header.append(tr("Evernote"));
 
-	root = new NoteItem;
-	root->type = TYPE_NOTEBOOK;
-	root->name = tr("My Account");
-
-	QList<QString> notebookGuids = notebookStatus->keys();
-	for (int i = 0; i < notebookGuids.size(); i++)
-	{
-		QString notebookGuid = notebookGuids[i];
-		QMap<QString, QString> nb = (*notebookStatus)[notebookGuid];
-
-		NoteItem* notebook = new NoteItem;
-		notebook->id = notebookGuid;
-		notebook->name = nb["name"];
-		notebook->type = TYPE_NOTEBOOK;
-
-		QString strStack = nb["stack"];
-		if (strStack.length() == 0)
-		{
-			root->childs.append(notebook);
-			notebook->parent = root;
-		}
-		else
-		{
-			int idx = root->getChildNamed(strStack);
-			if (idx >= 0 && root->childs.at(idx)->type == TYPE_STACK)
-			{
-				root->childs.at(idx)->childs.append(notebook);
-				notebook->parent = root->childs.at(idx);
-			}
-			else
-			{
-				NoteItem* stack = new NoteItem;
-				stack->name = strStack;
-				stack->type = TYPE_STACK;
-				stack->childs.append(notebook);
-				stack->parent = root;
-				root->childs.append(stack);
-				notebook->parent = stack;
-			}
-		}
-		
-		QMap<QString, NoteStatus> notes = (*noteStatus)[notebookGuid];
-		QList<QString> guids = notes.keys();
-		for (int k = 0; k < guids.size(); k++)
-		{
-			QString guid = guids.at(k);
-			NoteStatus stat = notes[guid];
-			NoteItem* note = new NoteItem;
-			note->id = guid;
-			note->name = stat.title;
-			note->mtime = stat.modify;
-			note->type = TYPE_NOTE;
-			note->parent = notebook;
-
-			notebook->childs.append(note);
-		}
-	}
+	root = NoteItem::fromEvernoteStatus(notebookStatus, noteStatus);
+	
 	return true;
 }

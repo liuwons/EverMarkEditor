@@ -14,17 +14,19 @@ SettingDialog::SettingDialog()
 	evernoteTokenLayout = new QHBoxLayout;
 	lbEvernoteToken = new QLabel(tr("Evernote Token"));
 	editEvernoteToken = new QLineEdit;
+	if (evernoteToken)
+		editEvernoteToken->setText(*evernoteToken);
 	evernoteTokenLayout->addWidget(lbEvernoteToken);
 	evernoteTokenLayout->addWidget(editEvernoteToken);
 	
 	cbEvernoteAccountType = new QComboBox;
-	cbEvernoteAccountType->addItem(tr("Evernote"));
-	cbEvernoteAccountType->addItem(tr("Yinxiang"));
+	cbEvernoteAccountType->addItem("evernote");
+	cbEvernoteAccountType->addItem("yinxiang");
 	cbMarkdownTheme = new QComboBox;
 	cbMarkdownTheme->addItem(tr("github"));
 	cbMarkdownTheme->addItem(tr("github2"));
 
-	btEvernoteToken = new QPushButton(tr("OK"));
+	btConfirm = new QPushButton(tr("OK"));
 
 	evernoteLayout->addLayout(evernoteTokenLayout);
 	evernoteLayout->addWidget(cbEvernoteAccountType);
@@ -32,9 +34,10 @@ SettingDialog::SettingDialog()
 	wgEvernote->setLayout(evernoteLayout);
 
 	mainLayout->addWidget(wgEvernote);
+	mainLayout->addWidget(btConfirm);
 	this->setLayout(mainLayout);
 
-	connect(btEvernoteToken, SIGNAL(clicked()), this, SLOT(setEvernoteToken()));
+	connect(btConfirm, SIGNAL(clicked()), this, SLOT(setEvernoteToken()));
 }
 
 SettingDialog::~SettingDialog()
@@ -43,9 +46,9 @@ SettingDialog::~SettingDialog()
 	delete editEvernoteToken;
 	delete cbEvernoteAccountType;
 	delete cbMarkdownTheme;
-	delete btEvernoteToken;
 	delete evernoteTokenLayout;
 	delete evernoteLayout;
+	delete btConfirm;
 	delete mainLayout;
 	delete wgEvernote;
 }
@@ -64,6 +67,11 @@ void SettingDialog::setEvernoteToken()
 		evernoteToken = new QString;
 	*evernoteToken = token;
 
+	QString evernoteAccountType = cbEvernoteAccountType->currentText();
+	QString markdownTheme = cbMarkdownTheme->currentText();
+
+	settings->setValue(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE, evernoteAccountType);
+	settings->setValue(CONFIG_STRING_MARKDOWN_THEME, markdownTheme);
 	settings->setValue(CONFIG_STRING_EVERNOTE_TOKEN, token);
 	settings->sync();
 }

@@ -7,8 +7,11 @@
 
 #include "awesome/QtAwesome.h"
 
-const QString CONFIG_STRING_WORKBENCH_PATH = "workbench_path";
-const QString CONFIG_STRING_EVERNOTE_TOKEN = "evernote_token";
+extern QString CONFIG_STRING_WORKBENCH_PATH;
+extern QString CONFIG_STRING_EVERNOTE_TOKEN;
+extern QString CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE;
+extern QString CONFIG_STRING_MARKDOWN_THEME;
+extern QString WORKBENCH_CONFIG_FILE_NAME;
 
 extern QSize screenSize;
 extern QString theme;

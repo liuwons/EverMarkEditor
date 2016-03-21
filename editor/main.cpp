@@ -61,6 +61,18 @@ void init()
 		qDebug() << "load evernote token: " << *evernoteToken;
 	}
 
+	if (settings->contains(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE))
+	{
+		evernoteAccountType = new QString(settings->value(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE).toString());
+		qDebug() << "load evernote account type: " << *evernoteAccountType;
+	}
+
+	if (settings->contains(CONFIG_STRING_MARKDOWN_THEME))
+	{
+		markdownTheme = new QString(settings->value(CONFIG_STRING_MARKDOWN_THEME).toString());
+		qDebug() << "load markdown theme: " << *markdownTheme;
+	}
+
 	settings->sync();
 }
 

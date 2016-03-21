@@ -9,8 +9,11 @@ class WorkbenchManager
 {
 public:
 	WorkbenchManager();
-	bool init(QString);		// Init from a path, load dump file if there is one, or init an empty hierarchy 
-	bool dump();	// Dump workbench information to a file in the workbench directory
+	~WorkbenchManager();
+	bool init(QString);		
+	bool dump();
+	bool createNote(QString notebookGuid, QString title, QString content);
+	bool updateNote(QString noteGuid, QString content);
 
 private:
 	QString path;

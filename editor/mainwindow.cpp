@@ -5,8 +5,12 @@
 #include <QFileDialog>
 #include <QTabWidget>
 #include <QApplication>
-
+#include <QMessageBox>
+#include <QPixmap>
+#include <QKeyEvent>
 #include <QTreeView>
+#include <QDesktopServices>
+
 #include "tool/evernotemanager.h"
 #include "tool/notemodel.h"
 #include "emfilesystemmodel.h"
@@ -253,7 +257,8 @@ void MainWindow::openFileFromMenu()
 
 void MainWindow::openDirFromMenu()
 {
-
+	QString dirName = QFileDialog::getExistingDirectory(this, tr("Open Directory"), QDir::currentPath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	setWindowTitle(dirName);
 }
 
 void MainWindow::saveFromMenu()
@@ -288,18 +293,19 @@ void MainWindow::dockedWindow()
 
 void MainWindow::about()
 {
-
+	QUrl url = QUrl::fromLocalFile("about.txt");
+	QDesktopServices::openUrl(url);
 }
 
 void MainWindow::help()
 {
-
+	QUrl url = QUrl::fromLocalFile("help.txt");
+	QDesktopServices::openUrl(url);
 }
 
 
 void MainWindow::previewNow()
 {
-
 }
 
 void MainWindow::setting()
@@ -307,4 +313,52 @@ void MainWindow::setting()
 	SettingDialog* sd = new SettingDialog;
 	sd->exec();
 	delete sd;
+}
+
+
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+	QWidget::keyPressEvent(e);
+	switch (e->key())
+	{
+	case Qt::Key_Control:
+		break;
+	}
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *e)
+{
+	QWidget::keyReleaseEvent(e);
+	switch (e->key())
+	{
+	case Qt::Key_Control:
+		break;
+	case Qt::Key_D:
+		break;
+	case Qt::Key_Space:
+		break;
+	}
+}
+
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+	QMessageBox msgBox;
+	msgBox.setWindowIcon(awesome->icon(fa::warning));
+	msgBox.setText("The document has been modified.");
+	msgBox.setInformativeText("Do you want to save your changes?");
+	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+	msgBox.setDefaultButton(QMessageBox::Save);
+	int ret = msgBox.exec();
+	switch (ret) {
+	case QMessageBox::Save:
+		break;
+	case QMessageBox::Discard:
+		break;
+	case QMessageBox::Cancel:
+		break;
+	default:
+		// should never be reached
+		break;
+	}
 }

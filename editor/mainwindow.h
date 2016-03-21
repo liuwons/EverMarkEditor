@@ -47,6 +47,11 @@ public slots:
 
 	void updateEvernoteNavigation();
 
+protected:
+	void closeEvent(QCloseEvent *e);
+	void keyPressEvent(QKeyEvent *e);
+	void keyReleaseEvent(QKeyEvent *e);
+
 private:
 	void createUI();
 	void createMenu();
