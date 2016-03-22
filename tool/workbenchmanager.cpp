@@ -86,7 +86,7 @@ bool WorkbenchManager::dump()
 	return true;
 }
 
-bool WorkbenchManager::createNote(QString notebookGuid, QString title, QString content)
+bool WorkbenchManager::createNote(QString stack, QString notebookGuid, QString guid, QString title, QString content)
 {
 	return true;
 }

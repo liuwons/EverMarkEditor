@@ -12,7 +12,7 @@ public:
 	~WorkbenchManager();
 	bool init(QString);		
 	bool dump();
-	bool createNote(QString notebookGuid, QString title, QString content);
+	bool createNote(QString stack, QString notebookGuid, QString guid, QString title, QString content);
 	bool updateNote(QString noteGuid, QString content);
 
 private:

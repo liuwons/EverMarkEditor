@@ -108,6 +108,7 @@ HEADERS += ./editor/config.h \
     ./tool/workbenchmanager.h \
     ./tool/notemodel.h \
     ./tool/noteitem.h \
+    ./tool/appcontext.h \
     ./3rd/awesome/QtAwesome.h \
     ./3rd/awesome/QtAwesomeAnim.h
 
@@ -132,5 +133,6 @@ SOURCES += ./editor/main.cpp \
     ./tool/workbenchmanager.cpp \
     ./tool/notemodel.cpp \
     ./tool/noteitem.cpp \
+    ./tool/appcontext.cpp \
     ./3rd/awesome/QtAwesome.cpp \
     ./3rd/awesome/QtAwesomeAnim.cpp
