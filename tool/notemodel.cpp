@@ -5,6 +5,7 @@
 
 
 #include "editor/config.h"
+#include "tool/appcontext.h"
 
 
 NoteModel::NoteModel(QObject *parent) : QAbstractItemModel(parent)
@@ -22,6 +23,8 @@ int NoteModel::columnCount(const QModelIndex &parent) const
 
 QVariant NoteModel::data(const QModelIndex &index, int role) const
 {
+	AppContext* context = AppContext::getContext();
+
 	if (!index.isValid())
 		return QVariant();
 
@@ -32,11 +35,11 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 		if (index.column() != 0)
 			return QVariant();
 		if (item->type == TYPE_NOTE)
-			return awesome->icon(fa::filecodeo);
+			return context->awesome->icon(fa::filecodeo);
 		else if (item->type == TYPE_NOTEBOOK)
-			return awesome->icon(fa::book);
+			return context->awesome->icon(fa::book);
 		else if (item->type == TYPE_STACK)
-			return awesome->icon(fa::folder);
+			return context->awesome->icon(fa::folder);
 	}
 	else if (role == Qt::DisplayRole)
 	{

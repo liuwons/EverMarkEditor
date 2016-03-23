@@ -1,11 +1,15 @@
 #include "settingdialog.h"
 #include "config.h"
 
+#include "tool/appcontext.h"
+
 #include <QMessageBox>
 #include <QDebug>
 
 SettingDialog::SettingDialog()
 {
+	AppContext* context = AppContext::getContext();
+
 	mainLayout = new QVBoxLayout;
 
 	wgEvernote = new QWidget;
@@ -14,8 +18,8 @@ SettingDialog::SettingDialog()
 	evernoteTokenLayout = new QHBoxLayout;
 	lbEvernoteToken = new QLabel(tr("Evernote Token"));
 	editEvernoteToken = new QLineEdit;
-	if (evernoteToken)
-		editEvernoteToken->setText(*evernoteToken);
+	if (context->evernoteToken)
+		editEvernoteToken->setText(*context->evernoteToken);
 	evernoteTokenLayout->addWidget(lbEvernoteToken);
 	evernoteTokenLayout->addWidget(editEvernoteToken);
 	
@@ -55,6 +59,8 @@ SettingDialog::~SettingDialog()
 
 void SettingDialog::setEvernoteToken()
 {
+	AppContext* context = AppContext::getContext();
+
 	QString token = editEvernoteToken->text();
 	if (!token.length())
 	{
@@ -63,15 +69,15 @@ void SettingDialog::setEvernoteToken()
 		msgBox.exec();
 	}
 
-	if (!evernoteToken)
-		evernoteToken = new QString;
-	*evernoteToken = token;
+	if (!context->evernoteToken)
+		context->evernoteToken = new QString;
+	*context->evernoteToken = token;
 
 	QString evernoteAccountType = cbEvernoteAccountType->currentText();
 	QString markdownTheme = cbMarkdownTheme->currentText();
 
-	settings->setValue(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE, evernoteAccountType);
-	settings->setValue(CONFIG_STRING_MARKDOWN_THEME, markdownTheme);
-	settings->setValue(CONFIG_STRING_EVERNOTE_TOKEN, token);
-	settings->sync();
+	context->settings->setValue(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE, evernoteAccountType);
+	context->settings->setValue(CONFIG_STRING_MARKDOWN_THEME, markdownTheme);
+	context->settings->setValue(CONFIG_STRING_EVERNOTE_TOKEN, token);
+	context->settings->sync();
 }

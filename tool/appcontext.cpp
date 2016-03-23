@@ -10,6 +10,16 @@ AppContext::AppContext()
 
 	evernoteManager = 0;
 	workbenchManager = 0;
+
+	awesome = 0;
+
+	settings = 0;
+
+	workbenchPath = 0;
+	evernoteToken = 0;
+	evernoteAccountType = 0;
+
+	markdownTheme = 0;
 }
 
 AppContext* AppContext::getContext()

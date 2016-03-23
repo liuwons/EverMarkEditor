@@ -16,6 +16,10 @@ public:
 	bool updateNote(QString noteGuid, QString content);
 
 private:
+	bool flushNote(QString guid, QString content);
+	QString getNoteFilePath(QString guid);
+
+	bool inited;
 	QString path;
 	NoteItem* root;		// The note hierarchy in the workbench
 };

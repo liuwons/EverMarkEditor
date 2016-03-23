@@ -13,6 +13,7 @@
 
 #include "tool/evernotemanager.h"
 #include "tool/notemodel.h"
+#include "tool/appcontext.h"
 #include "emfilesystemmodel.h"
 #include "settingdialog.h"
 
@@ -34,21 +35,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::createUI()
 {
+	AppContext* context = AppContext::getContext();
+
 	dockPreview = new QDockWidget(tr("Preview"));
-	dockPreview->setMinimumWidth(screenSize.width() / 3);
-	dockPreview->setMinimumHeight(screenSize.height() / 3*2);
+	dockPreview->setMinimumWidth(context->screenSize.width() / 3);
+	dockPreview->setMinimumHeight(context->screenSize.height() / 3 * 2);
 	dockPreview->setObjectName("preview_dock_widget");
 	preview = new Preview;
+	AppContext::getContext()->preview = preview;
 	dockPreview->setWidget(preview);
 	dockPreview->setAllowedAreas(Qt::RightDockWidgetArea);
 	dockPreview->setFloating(true);
 	addDockWidget(Qt::RightDockWidgetArea, dockPreview);
 
 	dockEditor = new QDockWidget(tr("Editor"));
-	dockEditor->setMinimumWidth(screenSize.width() / 3);
-	dockEditor->setMinimumHeight(screenSize.height() / 3*2);
+	dockEditor->setMinimumWidth(context->screenSize.width() / 3);
+	dockEditor->setMinimumHeight(context->screenSize.height() / 3 * 2);
 	dockEditor->setObjectName("editor_dock_widget");
 	editor = new Editor;
+	AppContext::getContext()->editor = editor;
 	dockEditor->setWidget(editor);
 	dockEditor->setFloating(true);
 	this->setCentralWidget(dockEditor);
@@ -58,7 +63,8 @@ void MainWindow::createUI()
 
 void MainWindow::updateEvernoteNavigation()
 {
-	if (! evernoteToken)
+	AppContext* context = AppContext::getContext();
+	if (! context->evernoteToken)
 	{
 		return;
 	}
@@ -66,12 +72,13 @@ void MainWindow::updateEvernoteNavigation()
 	if (evernoteManager)
 		delete evernoteManager;
 	evernoteManager = new EvernoteManager(
-		*evernoteToken,
+		*context->evernoteToken,
 		QString("yinxiang"),
 		QString("github"),
-		appDir + "/evermark",
-		appDir + "/evermark",
+		context->appDir + "/evermark",
+		context->appDir + "/evermark",
 		QString("sync"));
+	AppContext::getContext()->evernoteManager = evernoteManager;
 	if (!evernoteManager->init())
 	{
 		return;
@@ -118,7 +125,7 @@ void MainWindow::createNavigation()
 	navigationWidget->setLayout(dockNavigationLayout);
 
 	dockNavigation = new QDockWidget;
-	dockNavigation->setMinimumWidth(screenSize.width() / 5);
+	dockNavigation->setMinimumWidth(AppContext::getContext()->screenSize.width() / 5);
 	dockNavigation->setWidget(navigationWidget);
 
 	addDockWidget(Qt::LeftDockWidgetArea, dockNavigation);
@@ -129,24 +136,25 @@ void MainWindow::createNavigation()
 
 void MainWindow::createMenu()
 {
+	AppContext* context = AppContext::getContext();
 	menubar = this->menuBar();
 
 	fileMenu = menubar->addMenu(tr("File"));
 	openFileAct = new QAction(tr("Open File"), this);
-	openFileAct->setIcon(awesome->icon(fa::file));
+	openFileAct->setIcon(context->awesome->icon(fa::file));
 	openFileAct->setShortcut(QKeySequence::Open);
 	importAct = new QAction(tr("Import"), this);
-	importAct->setIcon(awesome->icon(fa::arrowdown));
+	importAct->setIcon(context->awesome->icon(fa::arrowdown));
 	openDirAct = new QAction(tr("Open Folder"), this);
-	openDirAct->setIcon(awesome->icon(fa::folderopen));
+	openDirAct->setIcon(context->awesome->icon(fa::folderopen));
 	saveAct = new QAction(tr("Save"), this);
-	saveAct->setIcon(awesome->icon(fa::save));
+	saveAct->setIcon(context->awesome->icon(fa::save));
 	saveAct->setShortcut(QKeySequence::Save);
 	saveAsAct = new QAction(tr("Save As"), this);
-	saveAsAct->setIcon(awesome->icon(fa::edit));
+	saveAsAct->setIcon(context->awesome->icon(fa::edit));
 	saveAsAct->setShortcut(QKeySequence::SaveAs);
 	exitAct = new QAction(tr("Exit"), this);
-	exitAct->setIcon(awesome->icon(fa::close));
+	exitAct->setIcon(context->awesome->icon(fa::close));
 	exitAct->setShortcut(QKeySequence::Quit);
 	fileMenu->addAction(openFileAct);
 	fileMenu->addAction(openDirAct);
@@ -160,23 +168,23 @@ void MainWindow::createMenu()
 
 	helpMenu = menubar->addMenu(tr("Help"));
 	aboutAct = new QAction(tr("About"), this);
-	aboutAct->setIcon(awesome->icon(fa::info));
+	aboutAct->setIcon(context->awesome->icon(fa::info));
 	helpAct = new QAction(tr("Help"), this);
-	helpAct->setIcon(awesome->icon(fa::mortarboard));
+	helpAct->setIcon(context->awesome->icon(fa::mortarboard));
 	helpMenu->addAction(aboutAct);
 	helpMenu->addAction(helpAct);
 
 	viewMenu = menubar->addMenu(tr("View"));
 	previewNowAct = new QAction(tr("Preview"), this);
-	previewNowAct->setIcon(awesome->icon(fa::eye));
+	previewNowAct->setIcon(context->awesome->icon(fa::eye));
 	editorViewAct = new QAction(tr("Editor"), this);
-	editorViewAct->setIcon(awesome->icon(fa::code));
+	editorViewAct->setIcon(context->awesome->icon(fa::code));
 	viewMenu->addAction(previewNowAct);
 	viewMenu->addAction(editorViewAct);
 
 	windowMenu = menubar->addMenu(tr("Window"));
 	settingAct = new QAction(tr("Setting"), this);
-	settingAct->setIcon(awesome->icon(fa::gears));
+	settingAct->setIcon(context->awesome->icon(fa::gears));
 	windowMenu->addAction(settingAct);
 
 	connect(openFileAct, SIGNAL(triggered()), this, SLOT(openFileFromMenu()));
@@ -193,14 +201,16 @@ void MainWindow::createMenu()
 
 void MainWindow::createToolBar()
 {
+	AppContext* context = AppContext::getContext();
+
 	toolBar = new QToolBar("top toolbar");
 	lbSyncStatus = new QLabel(QChar(fa::check));
-	lbSyncStatus->setFont(awesome->font(16));
+	lbSyncStatus->setFont(context->awesome->font(16));
 	toolBar->addWidget(lbSyncStatus);
 	toolBar->addSeparator();
 
 	tbPreviewNow = new QToolButton();
-	tbPreviewNow->setIcon(awesome->icon(fa::refresh));
+	tbPreviewNow->setIcon(context->awesome->icon(fa::refresh));
 	tbPreviewNow->setIconSize(QSize(16, 16));
 	toolBar->addWidget(tbPreviewNow);
 
@@ -344,7 +354,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
 void MainWindow::closeEvent(QCloseEvent *e)
 {
 	QMessageBox msgBox;
-	msgBox.setWindowIcon(awesome->icon(fa::warning));
+	msgBox.setWindowIcon(AppContext::getContext()->awesome->icon(fa::warning));
 	msgBox.setText("The document has been modified.");
 	msgBox.setInformativeText("Do you want to save your changes?");
 	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);

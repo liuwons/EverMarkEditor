@@ -10,6 +10,7 @@
 #include <QDir>
 
 #include "tool/evernotemanager.h"
+#include "tool/appcontext.h"
 
 #pragma comment(linker, "/subsystem:\"CONSOLE\" /entry:\"WinMainCRTStartup\"")
 
@@ -30,50 +31,52 @@ void setStyle()
 
 void initFontAwesome()
 {
-	awesome = new QtAwesome(qApp);
-	awesome->initFontAwesome();
+	AppContext::getContext()->awesome = new QtAwesome(qApp);
+	AppContext::getContext()->awesome->initFontAwesome();
 }
 
 void init()
 {
+	AppContext* context = AppContext::getContext();
+
 	QCoreApplication::setOrganizationName("WonSoft");
 	QCoreApplication::setOrganizationDomain("lwons.com");
 	QCoreApplication::setApplicationName("EverMarkEditor");
 
-	settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "WonSoft", "EverMarkEditor");
+	context->settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, "WonSoft", "EverMarkEditor");
 
-	if (settings->contains(CONFIG_STRING_WORKBENCH_PATH))
+	if (context->settings->contains(CONFIG_STRING_WORKBENCH_PATH))
 	{
-		workbenchPath = new QString(settings->value(CONFIG_STRING_WORKBENCH_PATH).toString());
-		qDebug() << "load workbench path: " << *workbenchPath;
+		context->workbenchPath = new QString(context->settings->value(CONFIG_STRING_WORKBENCH_PATH).toString());
+		qDebug() << "load workbench path: " << *context->workbenchPath;
 	}
 	else
 	{
 		QString homePath = QDir::homePath();
-		workbenchPath = new QString(homePath + "/evermark");
-		settings->setValue(CONFIG_STRING_WORKBENCH_PATH, homePath + *workbenchPath);
-		qDebug() << "set workbench path: " << *workbenchPath;
+		context->workbenchPath = new QString(homePath + "/evermark");
+		context->settings->setValue(CONFIG_STRING_WORKBENCH_PATH, homePath + *context->workbenchPath);
+		qDebug() << "set workbench path: " << *context->workbenchPath;
 	}
 
-	if (settings->contains(CONFIG_STRING_EVERNOTE_TOKEN))
+	if (AppContext::getContext()->settings->contains(CONFIG_STRING_EVERNOTE_TOKEN))
 	{
-		evernoteToken = new QString(settings->value(CONFIG_STRING_EVERNOTE_TOKEN).toString());
-		qDebug() << "load evernote token: " << *evernoteToken;
+		context->evernoteToken = new QString(context->settings->value(CONFIG_STRING_EVERNOTE_TOKEN).toString());
+		qDebug() << "load evernote token: " << *context->evernoteToken;
 	}
 
-	if (settings->contains(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE))
+	if (context->settings->contains(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE))
 	{
-		evernoteAccountType = new QString(settings->value(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE).toString());
-		qDebug() << "load evernote account type: " << *evernoteAccountType;
+		context->evernoteAccountType = new QString(context->settings->value(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE).toString());
+		qDebug() << "load evernote account type: " << *context->evernoteAccountType;
 	}
 
-	if (settings->contains(CONFIG_STRING_MARKDOWN_THEME))
+	if (context->settings->contains(CONFIG_STRING_MARKDOWN_THEME))
 	{
-		markdownTheme = new QString(settings->value(CONFIG_STRING_MARKDOWN_THEME).toString());
-		qDebug() << "load markdown theme: " << *markdownTheme;
+		context->markdownTheme = new QString(context->settings->value(CONFIG_STRING_MARKDOWN_THEME).toString());
+		qDebug() << "load markdown theme: " << *context->markdownTheme;
 	}
 
-	settings->sync();
+	context->settings->sync();
 }
 
 int main(int argc, char *argv[])
@@ -87,9 +90,9 @@ int main(int argc, char *argv[])
 
     QDesktopWidget* desk = a.desktop();
     QRect screenRect  = desk->screenGeometry();
-    screenSize   = QSize(screenRect.width(), screenRect.height());
+	AppContext::getContext()->screenSize = QSize(screenRect.width(), screenRect.height());
 
-	appDir = a.applicationDirPath();
+	AppContext::getContext()->appDir = a.applicationDirPath();
 
     MainWindow w;
     w.show();

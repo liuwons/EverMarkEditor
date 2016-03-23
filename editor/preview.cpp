@@ -2,19 +2,23 @@
 #include "preview.h"
 #include "config.h"
 
+#include "tool/appcontext.h"
+
 #include <QSize>
 #include <QFile.h>
 #include <QDebug>
 
 Preview::Preview(QSize sz)
 {
+	AppContext* context = AppContext::getContext();
+
     if (sz.width() && sz.height())
     {
         this->setGeometry(QRect(0, 0, sz.width(), sz.height()));
     }
     else
     {
-		this->setGeometry(QRect(0, 0, screenSize.width()/3, screenSize.height()/3*2));
+		this->setGeometry(QRect(0, 0, context->screenSize.width() / 3, context->screenSize.height() / 3 * 2));
     }
 
 	mainLayout = new QVBoxLayout;
@@ -45,7 +49,9 @@ Preview::~Preview()
 
 void Preview::loadCSS()
 {
-	QString cssFilePath = appDir + "/" + cssSubDir + "/" + theme + ".css";
+	AppContext* context = AppContext::getContext();
+
+	QString cssFilePath = context->appDir + "/" + context->cssSubDir + "/" + context->theme + ".css";
 	QFile f(cssFilePath);
 	if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
 	{

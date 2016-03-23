@@ -10,6 +10,7 @@
 WorkbenchManager::WorkbenchManager()
 {
 	root = 0;
+	inited = false;
 }
 
 WorkbenchManager::~WorkbenchManager()
@@ -43,6 +44,8 @@ bool WorkbenchManager::init(QString workbenchPath)
 			if (root)
 				delete root;
 			root = NoteItem::fromJsonString(content);
+
+			inited = true;
 			return true;
 		}
 	}
@@ -51,13 +54,15 @@ bool WorkbenchManager::init(QString workbenchPath)
 	root->type = TYPE_ROOT;
 
 	path = workbenchPath;
+
+	inited = true;
 	return true;
 }
 
 // Dump workbench information to a file in the workbench directory
 bool WorkbenchManager::dump()
 {
-	if (!root)
+	if (!root || !inited)
 		return false;
 	QDir dir(path);
 	if (!dir.exists())
@@ -88,10 +93,84 @@ bool WorkbenchManager::dump()
 
 bool WorkbenchManager::createNote(QString stack, QString notebookGuid, QString guid, QString title, QString content)
 {
-	return true;
+	if (!inited)
+		return false;
+
+	NoteItem* notebook = 0;
+	if (stack.length() > 0)
+	{
+		for (int i = 0; i < root->childs.size(); i++)
+		{
+			if (root->childs.at(i)->type == TYPE_STACK && root->childs.at(i)->name == stack)
+			{
+				NoteItem* stack = root->childs.at(i);
+				for (int k = 0; k < stack->childs.size(); k++)
+				{
+					if (stack->childs.at(k)->id == notebookGuid)
+					{
+						notebook = stack->childs.at(k);
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < root->childs.size(); i++)
+		{
+			if (root->childs.at(i)->type == TYPE_NOTEBOOK && root->childs.at(i)->id == notebookGuid)
+			{
+				notebook = root->childs.at(i);
+				break;
+			}
+		}
+	}
+
+	if (!notebook)
+		return false;
+
+	NoteItem* note = new NoteItem;
+	note->name = title;
+	note->id = guid;
+	note->type = TYPE_NOTE;
+	note->parent = notebook;
+	note->mtime;
+	notebook->childs.append(note);
+
+	return flushNote(guid, content);
 }
 
 bool WorkbenchManager::updateNote(QString noteGuid, QString content)
 {
+	return flushNote(noteGuid, content);
+}
+
+bool WorkbenchManager::flushNote(QString guid, QString content)
+{
+	if (!inited)
+		return false;
+	QString fpath = getNoteFilePath(guid);
+	QFile file(fpath);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() << "ERROR: open file failed: " << "theme.css";
+		return false;
+	}
+
+	std::string strContent = content.toStdString();
+	file.write(strContent.c_str());
+	file.close();
+
 	return true;
+}
+
+
+QString WorkbenchManager::getNoteFilePath(QString guid)
+{
+	if (!inited)
+		return "";
+
+	return path + "/" + guid + ".md";
 }
