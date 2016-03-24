@@ -50,7 +50,7 @@ void init()
 		context->workbenchPath = new QString(context->settings->value(CONFIG_STRING_WORKBENCH_PATH).toString());
 		qDebug() << "load workbench path: " << *context->workbenchPath;
 	}
-	else
+	else    // Set default workbench path as ~/evermark
 	{
 		QString homePath = QDir::homePath();
 		context->workbenchPath = new QString(homePath + "/evermark");
@@ -69,11 +69,23 @@ void init()
 		context->evernoteAccountType = new QString(context->settings->value(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE).toString());
 		qDebug() << "load evernote account type: " << *context->evernoteAccountType;
 	}
+	else    // Set default Account Type
+	{
+		context->evernoteAccountType = new QString("evernote");
+		context->settings->setValue(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE, *context->evernoteAccountType);
+		qDebug() << "set evernote account type: " << *context->evernoteAccountType;
+	}
 
 	if (context->settings->contains(CONFIG_STRING_MARKDOWN_THEME))
 	{
 		context->markdownTheme = new QString(context->settings->value(CONFIG_STRING_MARKDOWN_THEME).toString());
 		qDebug() << "load markdown theme: " << *context->markdownTheme;
+	}
+	else    // Set default Theme
+	{
+		context->markdownTheme = new QString("github");
+		context->settings->setValue(CONFIG_STRING_MARKDOWN_THEME, *context->markdownTheme);
+		qDebug() << "set markdown theme: " << *context->markdownTheme;
 	}
 
 	context->settings->sync();
