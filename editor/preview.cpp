@@ -51,11 +51,11 @@ void Preview::loadCSS()
 {
 	AppContext* context = AppContext::getContext();
 
-	QString cssFilePath = context->appDir + "/" + context->cssSubDir + "/" + context->theme + ".css";
+	QString cssFilePath = context->appDir + "/" + context->cssSubDir + "/" + *context->markdownTheme + ".css";
 	QFile f(cssFilePath);
 	if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		qDebug() << "ERROR: read css file failed.";
+		qDebug() << "ERROR: read css file failed, " << cssFilePath;
 		return;
 	}
 

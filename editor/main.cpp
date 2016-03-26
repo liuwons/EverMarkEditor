@@ -39,6 +39,8 @@ void init()
 {
 	AppContext* context = AppContext::getContext();
 
+	context->cssSubDir = "css";
+
 	QCoreApplication::setOrganizationName("WonSoft");
 	QCoreApplication::setOrganizationDomain("lwons.com");
 	QCoreApplication::setApplicationName("EverMarkEditor");
