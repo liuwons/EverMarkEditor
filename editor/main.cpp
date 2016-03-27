@@ -102,11 +102,13 @@ int main(int argc, char *argv[])
 	setStyle();
 	initFontAwesome();
 
+	AppContext* context = AppContext::getContext();
+
     QDesktopWidget* desk = a.desktop();
     QRect screenRect  = desk->screenGeometry();
-	AppContext::getContext()->screenSize = QSize(screenRect.width(), screenRect.height());
+	context->screenSize = QSize(screenRect.width(), screenRect.height());
 
-	AppContext::getContext()->appDir = a.applicationDirPath();
+	context->appDir = a.applicationDirPath();
 
     MainWindow w;
     w.show();
