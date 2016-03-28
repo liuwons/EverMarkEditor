@@ -80,6 +80,12 @@ bool EvernoteManager::init()
 		return false;
 	}
 
+	handleGetNote = PyObject_GetAttrString(pModule, "get_note");
+	if (!handleGetNote || !PyCallable_Check(handleGetNote))
+	{
+		return false;
+	}
+
 	std::string str_auth = this->authToken.toStdString();
 	std::string str_type = this->accountType.toStdString();
 	std::string str_style = this->style.toStdString();
@@ -231,4 +237,18 @@ bool EvernoteManager::updateNote(QString notebookGuid, QString guid, QString tit
 			return true;
 	}
 	return false;
+}
+
+QString EvernoteManager::getNote(QString noteGuid)
+{
+	std::string str_note_guid = noteGuid.toStdString();
+	PyObject* args = Py_BuildValue("s", str_note_guid.c_str());
+	PyObject* pRet = PyObject_CallObject(handleGetNote, args);
+	if (pRet)
+	{
+		char* str = PyString_AsString(pRet);
+		return QString(str);
+	}
+
+	return QString("");
 }

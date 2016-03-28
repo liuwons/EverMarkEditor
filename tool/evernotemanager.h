@@ -26,6 +26,7 @@ public:
 	bool createNotebook(QString name);
 	bool createNote(QString notebookGuid, QString title, QString content, bool isMarkdown);
 	bool updateNote(QString notebookGuid, QString guid, QString title, QString content, bool isMarkdown);
+	QString getNote(QString noteGuid);
 
 private:
 	QString authToken;
@@ -42,6 +43,7 @@ private:
 	PyObject* handleCreateNotebook;
 	PyObject* handleCreateNote;
 	PyObject* handleUpdateNote;
+	PyObject* handleGetNote;
 };
 
 

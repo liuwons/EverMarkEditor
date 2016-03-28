@@ -17,11 +17,14 @@ import evernote.edam.notestore.NoteStore as NoteStore
 import evernote.edam.userstore.constants as UserStoreConstants
 from evernote.api.client import EvernoteClient
 
+
 def current_time():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+
 def modify_time(fpath):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime(fpath)))
+
 
 def compare(str_time1, str_time2):
     time1 = time.strptime(str_time1, '%Y-%m-%d %H:%M:%S')
@@ -29,6 +32,7 @@ def compare(str_time1, str_time2):
     timestamp1 = time.mktime(time1)
     timestamp2 = time.mktime(time2)
     return timestamp1 - timestamp2
+
 
 class EverMark(object):
     def __init__(self, account_type, auth_token, style, root_path):
@@ -43,6 +47,7 @@ class EverMark(object):
         self.client = None
         self.user_store = None
         self.note_store = None
+        self.notebooks = None
 
     def login(self):
         yx = False
@@ -170,3 +175,10 @@ class EverMark(object):
         note = self.inner_create_note(notebook_guid, note_title, html, guid)
         self.note_store.updateNote(note)
         return 0
+
+    def get_note(self, note_guid):
+        note = self.note_store.getNote(note_guid, True, True, True, True)
+        if note.content is not None:
+            return note.content
+        else:
+            return ''
