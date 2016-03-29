@@ -104,7 +104,7 @@ bool EvernoteManager::init()
 	std::string str_style = this->style.toStdString();
 	std::string str_root = this->rootPath.toStdString();
 
-	PyObject* args = Py_BuildValue("ssss", str_type.c_str(), str_auth.c_str(), str_style.c_str(), str_root.c_str());
+	PyObject* args = Py_BuildValue("(ssss)", str_type.c_str(), str_auth.c_str(), str_style.c_str(), str_root.c_str());
 	PyObject* pRet = PyObject_CallObject(handleInit, args);
 	if (pRet)
 	{
@@ -214,7 +214,7 @@ bool EvernoteManager::createNotebook(QString name)
 {
 	std::string str_name = name.toStdString();
 
-	PyObject* args = Py_BuildValue("s", str_name.c_str());
+	PyObject* args = Py_BuildValue("(s)", str_name.c_str());
 	PyObject* pRet = PyObject_CallObject(handleCreateNotebook, args);
 	if (pRet)
 	{
@@ -232,7 +232,7 @@ bool EvernoteManager::createNote(QString notebookGuid, QString title, QString co
 	std::string str_content = content.toStdString();
 	int is_markdown = isMarkdown ? 1 : 0;
 
-	PyObject* args = Py_BuildValue("sssi", str_notebook_guid.c_str(), str_title.c_str(), str_content.c_str(), is_markdown);
+	PyObject* args = Py_BuildValue("(sssi)", str_notebook_guid.c_str(), str_title.c_str(), str_content.c_str(), is_markdown);
 	PyObject* pRet = PyObject_CallObject(handleCreateNote, args);
 	if (pRet)
 	{
@@ -252,7 +252,7 @@ bool EvernoteManager::updateNote(QString notebookGuid, QString guid, QString tit
 	std::string str_content = content.toStdString();
 	int is_markdown = isMarkdown ? 1 : 0;
 
-	PyObject* args = Py_BuildValue("ssssi", str_notebook_guid.c_str(), str_guid.c_str(), str_title.c_str(), str_content.c_str(), is_markdown);
+	PyObject* args = Py_BuildValue("(ssssi)", str_notebook_guid.c_str(), str_guid.c_str(), str_title.c_str(), str_content.c_str(), is_markdown);
 	PyObject* pRet = PyObject_CallObject(handleUpdateNote, args);
 	if (pRet)
 	{
