@@ -15,10 +15,14 @@ EvernoteManager::EvernoteManager(QString auth, QString type, QString style, QStr
 	this->rootPath = root;
 	this->executablePath = execPath;
 	this->executableName = execName;
+	this->is_logined = false;
 }
 
 bool EvernoteManager::init()
 {
+	qDebug() << "[DEBUG] EvernoteManager init.";
+	qDebug() << "[DEBUG] EvernoteManager type(" << accountType << "), style(" << style << ").";
+
 	Py_Initialize();
 
 	QString chdirCmd = QString("sys.path.append('") + this->executablePath + "')";
@@ -35,54 +39,63 @@ bool EvernoteManager::init()
 	PyObject* pModule = PyImport_Import(moduleName);
 	if (!pModule) 
 	{
+		qDebug() << "[ERROR] EvernoteManager import python module failed";
 		return false;
 	}
 
 	handleInit = PyObject_GetAttrString(pModule, "init");
 	if (!handleInit || !PyCallable_Check(handleInit)) 
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function init failed";
 		return false;
 	}
 
 	handleLogin = PyObject_GetAttrString(pModule, "login");
 	if (!handleLogin || !PyCallable_Check(handleLogin))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function login failed";
 		return false;
 	}
 
 	handleGetNotebookStatus = PyObject_GetAttrString(pModule, "get_notebook_status");
 	if (!handleGetNotebookStatus || !PyCallable_Check(handleGetNotebookStatus))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function get_notebook_status failed";
 		return false;
 	}
 
 	handleGetNoteStatus = PyObject_GetAttrString(pModule, "get_note_status");
 	if (!handleGetNoteStatus || !PyCallable_Check(handleGetNoteStatus))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function get_note_status failed";
 		return false;
 	}
 
 	handleCreateNotebook = PyObject_GetAttrString(pModule, "create_notebook");
 	if (!handleCreateNotebook || !PyCallable_Check(handleCreateNotebook))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function create_notebook failed";
 		return false;
 	}
 
 	handleCreateNote = PyObject_GetAttrString(pModule, "create_note");
 	if (!handleCreateNote || !PyCallable_Check(handleCreateNote))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function create_note failed";
 		return false;
 	}
 
 	handleUpdateNote = PyObject_GetAttrString(pModule, "update_note");
 	if (!handleUpdateNote || !PyCallable_Check(handleUpdateNote))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function update_note failed";
 		return false;
 	}
 
 	handleGetNote = PyObject_GetAttrString(pModule, "get_note");
 	if (!handleGetNote || !PyCallable_Check(handleGetNote))
 	{
+		qDebug() << "[ERROR] EvernoteManager get python function get_note failed";
 		return false;
 	}
 
@@ -97,7 +110,10 @@ bool EvernoteManager::init()
 	{
 		long result = PyInt_AsLong(pRet);
 		if (result == 0)
+		{
+			qDebug() << "[INFO] EvernoteManager init succeed";
 			return true;
+		}
 	}
 
 	return false;
@@ -111,9 +127,17 @@ bool EvernoteManager::login()
 	{
 		long result = PyInt_AsLong(pRet);
 		if (result == 0)
+		{
+			is_logined = true;
 			return true;
+		}
 	}
 	return false;
+}
+
+bool EvernoteManager::logined()
+{
+	return is_logined;
 }
 
 QMap<QString, QMap<QString, QString> >* EvernoteManager::getNotebookStatus()
@@ -242,12 +266,17 @@ bool EvernoteManager::updateNote(QString notebookGuid, QString guid, QString tit
 QString EvernoteManager::getNote(QString noteGuid)
 {
 	std::string str_note_guid = noteGuid.toStdString();
-	PyObject* args = Py_BuildValue("s", str_note_guid.c_str());
+	PyObject* args = Py_BuildValue("(s)", str_note_guid.c_str());
 	PyObject* pRet = PyObject_CallObject(handleGetNote, args);
 	if (pRet)
 	{
 		char* str = PyString_AsString(pRet);
+		qDebug() << "[DEBUG] EvernoteManager::getNote(" << noteGuid << "): " << str;
 		return QString(str);
+	}
+	else
+	{
+		qDebug() << "[ERROR] EvernoteManager::getNote(" << noteGuid << ") failed";
 	}
 
 	return QString("");

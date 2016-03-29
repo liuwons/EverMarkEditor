@@ -27,6 +27,7 @@ public:
 
 public slots:
 	void loadFile(QString fpath);
+	void loadNote(QString guid);
 
 	// From Menu Bar
 	void openFileFromMenu();
@@ -44,6 +45,7 @@ public slots:
 	// From Tool Bar
 	void previewNow();
 	void openFileFromLocalNavigation(const QModelIndex & index);
+	void openNoteFromEvernoteNavigation(const QModelIndex& index);
 
 	void updateEvernoteNavigation();
 
@@ -58,8 +60,6 @@ private:
 	void createToolBar();
 	void createStatusBar();
 	void createNavigation();
-
-	EvernoteManager* evernoteManager;
 
 	NoteModel* evernoteModel;
 	QTreeView* evernoteTree;

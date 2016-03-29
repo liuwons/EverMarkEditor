@@ -13,16 +13,19 @@ def init(account_type, auth_token, style, root_path):
 
 
 def login():
+    print '[DEBUG] sync login'
     global em
     return em.login()
 
 
 def get_notebook_status():
+    print '[DEBUG] sync get_notebook_status'
     global em
     return em.get_notebook_status()
 
 
 def get_note_status():
+    print '[DEBUG] sync get_note_status'
     global em
     return em.get_note_status()
 
@@ -43,5 +46,7 @@ def update_note(notebook_guid, guid, note_title, content, is_markdown):
 
 
 def get_note(note_guid):
+    print '[DEBUG] sync get_note(%s)' % note_guid
     global em
     return em.get_note(note_guid)
+

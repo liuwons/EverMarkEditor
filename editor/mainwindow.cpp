@@ -58,38 +58,23 @@ void MainWindow::createUI()
 	dockEditor->setFloating(true);
 	this->setCentralWidget(dockEditor);
 	
-	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateContent(QString)));
+	connect(editor, SIGNAL(contentChanged(QString)), preview, SLOT(updateMarkdownContent(QString)));
 }
 
 void MainWindow::updateEvernoteNavigation()
 {
-	AppContext* context = AppContext::getContext();
-	if (! context->evernoteToken)
-	{
-		return;
-	}
 
-	if (evernoteManager)
-		delete evernoteManager;
-	evernoteManager = new EvernoteManager(
-		*context->evernoteToken,
-		QString("yinxiang"),
-		QString("github"),
-		context->appDir + "/evermark",
-		context->appDir + "/evermark",
-		QString("sync"));
-	AppContext::getContext()->evernoteManager = evernoteManager;
-	if (!evernoteManager->init())
+	AppContext* context = AppContext::getContext();
+	if (!context->evernoteManager || !context->evernoteManager->logined())
 	{
+		qDebug() << "[ERROR] MainWindow updateEvernoteNavigation evernoteManager not logined";
 		return;
 	}
-	if (!evernoteManager->login())
-	{
-		return;
-	}
-	bool load = evernoteModel->loadFromEvernoteManager(evernoteManager);
+	
+	bool load = evernoteModel->loadFromEvernoteManager(context->evernoteManager);
 	if (!load)
 	{
+		qDebug() << "[ERROR] MainWindow updateEvernoteNavigation loadFromEvernoteManager failed";
 		return;
 	}
 	evernoteTree->setModel(evernoteModel);
@@ -109,7 +94,6 @@ void MainWindow::createNavigation()
 	evernoteTree = new QTreeView;
 	evernoteModel = new NoteModel;
 	workbenchTree = new QTreeView;
-	evernoteManager = 0;
 
 	QTabWidget* tab = new QTabWidget;
 	tab->setTabPosition(QTabWidget::South);
@@ -131,6 +115,7 @@ void MainWindow::createNavigation()
 	addDockWidget(Qt::LeftDockWidgetArea, dockNavigation);
 
 	connect(localFileTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openFileFromLocalNavigation(const QModelIndex &)));
+	connect(evernoteTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openNoteFromEvernoteNavigation(const QModelIndex &)));
 }
 
 
@@ -239,12 +224,42 @@ void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
 	}
 }
 
+void MainWindow::openNoteFromEvernoteNavigation(const QModelIndex & index)
+{
+	if (!index.isValid())
+		return;
+
+	NoteItem *item = static_cast<NoteItem*>(index.internalPointer());
+	if (!item || item->type != TYPE_NOTE)
+		return;
+
+	if (item->name.length() > 0)
+		qDebug() << "[DEBUG] Open note from evernote navigation: " << item->name;
+
+	QString guid = item->id;
+	loadNote(guid);
+}
+
+void MainWindow::loadNote(QString guid)
+{
+	AppContext* context = AppContext::getContext();
+	if (!context->evernoteManager || !context->evernoteManager->logined())
+	{
+		qDebug() << "[ERROR] MainWindow loadNote failed: EvernoteManager not logined";
+		return;
+	}
+	QString content = context->evernoteManager->getNote(guid);
+	preview->updateHtmlContent(content);
+
+	qDebug() << "[DEBUG] MainWindow loadNote content length: " << content.length();
+}
+
 void MainWindow::loadFile(QString fpath)
 {
 	QFile file(fpath);
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
 	{
-		qDebug() << "ERROR: read file failed. " << fpath;
+		qDebug() << "[ERROR] read file failed. " << fpath;
 		return;
 	}
 

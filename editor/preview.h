@@ -8,6 +8,12 @@
 #include <QWebView>
 #include <QVBoxLayout>
 
+enum ContentType
+{
+	MARKDOWN,
+	HTML
+};
+
 class Preview : public QWidget
 {
 	Q_OBJECT
@@ -17,7 +23,8 @@ public:
 	~Preview();
 
 public slots:
-	void updateContent(QString md);
+	void updateMarkdownContent(QString md);
+	void updateHtmlContent(QString html);
 	void refresh();
 	void loadCSS();
 
@@ -31,7 +38,8 @@ private:
 	QTimer* timer;
 	QString cssString;
 
-	QString markdown;
+	QString content;
+	ContentType type;
 	bool needRefresh;
 
 	QWebView* webView;

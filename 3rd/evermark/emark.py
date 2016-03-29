@@ -50,6 +50,7 @@ class EverMark(object):
         self.notebooks = None
 
     def login(self):
+        print '[DEBUG] emark login'
         yx = False
         if self.account_type == 'yinxiang':
             yx = True
@@ -68,6 +69,7 @@ class EverMark(object):
             return 1
 
     def get_notebook_status(self):
+        print '[DEBUG] emark get_notebook_status'
         self.notebooks = self.note_store.listNotebooks()
         notebooks = {}
         for notebook in self.notebooks:
@@ -79,6 +81,7 @@ class EverMark(object):
         return json.dumps(notebooks).encode('utf-8')
 
     def get_note_status(self):
+        print '[DEBUG] emark get_note_status'
         find_filter = NoteStore.NoteFilter()
         spec = NoteStore.NotesMetadataResultSpec()
         spec.includeTitle = True
@@ -177,8 +180,11 @@ class EverMark(object):
         return 0
 
     def get_note(self, note_guid):
+        print '[DEBUG] emark get_note(%s)' % note_guid
         note = self.note_store.getNote(note_guid, True, True, True, True)
         if note.content is not None:
             return note.content
         else:
             return ''
+
+

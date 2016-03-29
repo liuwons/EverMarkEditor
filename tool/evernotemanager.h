@@ -21,6 +21,7 @@ public:
 	EvernoteManager(QString auth, QString type, QString style, QString root, QString execPath, QString execName);
 	bool init();
 	bool login();
+	bool logined();
 	QMap<QString, QMap<QString, QString> >* getNotebookStatus();
 	QMap<QString, QMap<QString, NoteStatus> >* getNoteStatus();
 	bool createNotebook(QString name);
@@ -35,6 +36,7 @@ private:
 	QString rootPath;
 	QString executablePath;
 	QString executableName;
+	bool is_logined;
 
 	PyObject* handleInit;
 	PyObject* handleLogin;

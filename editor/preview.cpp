@@ -63,9 +63,17 @@ void Preview::loadCSS()
 	f.close();
 }
 
-void Preview::updateContent(QString md)
+void Preview::updateMarkdownContent(QString md)
 {
-	markdown = md;
+	content = md;
+	type = MARKDOWN;
+	needRefresh = true;
+}
+
+void Preview::updateHtmlContent(QString html)
+{
+	content = html;
+	type = HTML;
 	needRefresh = true;
 }
 
@@ -86,19 +94,31 @@ void Preview::refresh()
 	if (!needRefresh)
 		return;
 	
-	qDebug() << "Render Markdown and refresh preview";
+	if (type == MARKDOWN)
+	{
+		qDebug() << "[DEBUG] Render Markdown and refresh preview";
 
-	std::string std_str = markdown.toStdString();
-	const char* cstr = std_str.c_str();
+		std::string std_str = content.toStdString();
+		const char* cstr = std_str.c_str();
 
-	hoedown_buffer_set(buf, 0, 0);
+		hoedown_buffer_set(buf, 0, 0);
 
-	hoedown_document_render(document, buf, (const uint8_t*)cstr, strlen(cstr));
+		hoedown_document_render(document, buf, (const uint8_t*)cstr, strlen(cstr));
 
-	QString html((const char*)buf->data);
-	html = themelize(html);
+		QString html((const char*)buf->data);
+		html = themelize(html);
 
-	webView->setHtml(html);
+		webView->setHtml(html);
 
-	needRefresh = false;
+		needRefresh = false;
+	}
+	else if (type == HTML)
+	{
+		qDebug() << "[DEBUG] Render html and refresh preview";
+		qDebug() << "[DEBUG] content: " << content;
+
+		webView->setHtml(content);
+		needRefresh = false;
+	}
+	
 }
