@@ -16,6 +16,7 @@
 #include <QToolButton>
 #include <QTreeView>
 #include <QFileSystemModel>
+#include <QPoint>
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +29,8 @@ public:
 public slots:
 	void loadFile(QString fpath);
 	void loadNote(QString guid);
+	void evernoteContextMenuRequest(const QPoint &point);
+	void evernoteContextSync();
 
 	// From Menu Bar
 	void openFileFromMenu();
@@ -76,6 +79,10 @@ private:
 	QDockWidget* dockNavigation;
 	QDockWidget* dockLocalNavigation;
 	QDockWidget* dockRemoteNavigation;
+
+	QMenu* evernoteContextMenu;
+	QAction* evernoteSyncAction;
+	QAction* evernoteDeleteAction;
 
 	// ----------------------Menu Bar-------------------------
 	QMenuBar*  menubar;

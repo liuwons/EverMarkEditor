@@ -92,6 +92,17 @@ void MainWindow::createNavigation()
 	localFileTree->hideColumn(3);
 
 	evernoteTree = new QTreeView;
+	evernoteTree->setContextMenuPolicy(Qt::CustomContextMenu);
+	evernoteContextMenu = new QMenu(evernoteTree);
+	evernoteSyncAction = new QAction(tr("Sync"), evernoteContextMenu);
+	evernoteSyncAction->setIcon(AppContext::getContext()->awesome->icon(fa::cloudupload));
+	evernoteDeleteAction = new QAction(tr("Delete"), evernoteContextMenu);
+	evernoteDeleteAction->setIcon(AppContext::getContext()->awesome->icon(fa::close));
+	evernoteContextMenu->addAction(evernoteSyncAction);
+	evernoteContextMenu->addAction(evernoteDeleteAction);
+	connect(evernoteSyncAction, SIGNAL(triggered()), this, SLOT(evernoteContextSync()));
+	connect(evernoteTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(evernoteContextMenuRequest(const QPoint &)));
+
 	evernoteModel = new NoteModel;
 	workbenchTree = new QTreeView;
 
@@ -214,6 +225,20 @@ void MainWindow::createStatusBar()
 	statusbar->addWidget(lbPosition, 1);
 }
 
+void MainWindow::evernoteContextMenuRequest(const QPoint &point)
+{
+	QModelIndex index = evernoteTree->indexAt(point);
+	if (!index.isValid())
+		return;
+	qDebug() << "[DEBUG] MainWindow::evernoteContextMenuRequest row(" << index.row() << ")";
+	evernoteContextMenu->exec(evernoteTree->mapToGlobal(point));
+}
+
+void MainWindow::evernoteContextSync()
+{
+	qDebug() << "[DEBUG] MainWindow::evernoteContextSync";
+}
+
 void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
 {
 	QString fpath = localFileModel->filePath(index);
@@ -268,6 +293,7 @@ void MainWindow::loadFile(QString fpath)
 
 	editor->loadContent(content);
 }
+
 
 void MainWindow::openFileFromMenu()
 {
