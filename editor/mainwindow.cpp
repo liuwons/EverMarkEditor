@@ -82,6 +82,8 @@ void MainWindow::updateEvernoteNavigation()
 
 void MainWindow::createNavigation()
 {
+	AppContext* context = AppContext::getContext();
+
 	localFileModel = new EMFileSystemModel;
 	localFileModel->setRootPath(QDir::currentPath());
 	localFileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs | QDir::AllEntries);
@@ -93,20 +95,48 @@ void MainWindow::createNavigation()
 
 	evernoteTree = new QTreeView;
 	evernoteTree->setContextMenuPolicy(Qt::CustomContextMenu);
-	evernoteContextMenu = new QMenu(evernoteTree);
-	evernoteUploadAction = new QAction(tr("Upload"), evernoteContextMenu);
-	evernoteUploadAction->setIcon(AppContext::getContext()->awesome->icon(fa::cloudupload));
-	evernoteDownloadAction = new QAction(tr("Download"), evernoteContextMenu);
-	evernoteDownloadAction->setIcon(AppContext::getContext()->awesome->icon(fa::clouddownload));
-	evernoteDeleteAction = new QAction(tr("Delete"), evernoteContextMenu);
-	evernoteDeleteAction->setIcon(AppContext::getContext()->awesome->icon(fa::close));
-	evernoteContextMenu->addAction(evernoteUploadAction);
-	evernoteContextMenu->addAction(evernoteDownloadAction);
-	evernoteContextMenu->addAction(evernoteDeleteAction);
-	connect(evernoteUploadAction, SIGNAL(triggered()), this, SLOT(evernoteContextUpload()));
-	connect(evernoteDownloadAction, SIGNAL(triggered()), this, SLOT(evernoteContextDownload()));
-	connect(evernoteDeleteAction, SIGNAL(triggered()), this, SLOT(evernoteContextDelete()));
+
+	//--------------------Note Context Menu--------------------------------
+	evernoteContextMenuNote = new QMenu(evernoteTree);
+	evernoteNoteOpenAction = new QAction(tr("Open"), evernoteContextMenuNote);
+	evernoteNoteOpenAction->setIcon(context->awesome->icon(fa::pencil));
+	evernoteNoteUploadAction = new QAction(tr("Upload"), evernoteContextMenuNote);
+	evernoteNoteUploadAction->setIcon(context->awesome->icon(fa::cloudupload));
+	evernoteNoteDownloadAction = new QAction(tr("Download"), evernoteContextMenuNote);
+	evernoteNoteDownloadAction->setIcon(context->awesome->icon(fa::clouddownload));
+	evernoteNoteDeleteAction = new QAction(tr("Delete"), evernoteContextMenuNote);
+	evernoteNoteDeleteAction->setIcon(context->awesome->icon(fa::close));
+	evernoteContextMenuNote->addAction(evernoteNoteOpenAction);
+	evernoteContextMenuNote->addAction(evernoteNoteUploadAction);
+	evernoteContextMenuNote->addAction(evernoteNoteDownloadAction);
+	evernoteContextMenuNote->addAction(evernoteNoteDeleteAction);
+	connect(evernoteNoteOpenAction, SIGNAL(triggered()), this, SLOT(evernoteContextOpen()));
+	connect(evernoteNoteUploadAction, SIGNAL(triggered()), this, SLOT(evernoteContextUpload()));
+	connect(evernoteNoteDownloadAction, SIGNAL(triggered()), this, SLOT(evernoteContextDownload()));
+	connect(evernoteNoteDeleteAction, SIGNAL(triggered()), this, SLOT(evernoteContextDelete()));
+
+	evernoteContextMenuNotebook = new QMenu(evernoteTree);
+	evernoteNotebookAddAction = new QAction(tr("Add"), evernoteContextMenuNotebook);
+	evernoteNotebookAddAction->setIcon(context->awesome->icon(fa::plus));
+	evernoteNotebookRefreshAction = new QAction(tr("Refresh"), evernoteContextMenuNotebook);
+	evernoteNotebookRefreshAction->setIcon(context->awesome->icon(fa::refresh));
+	evernoteContextMenuNotebook->addAction(evernoteNotebookAddAction);
+	evernoteContextMenuNotebook->addAction(evernoteNotebookRefreshAction);
+	connect(evernoteNotebookAddAction, SIGNAL(triggered()), this, SLOT(evernoteContextAdd()));
+	connect(evernoteNotebookRefreshAction, SIGNAL(triggered()), this, SLOT(evernoteContextRefresh()));
+
+	evernoteContextMenuStack = new QMenu(evernoteTree);
+	evernoteStackAddAction = new QAction(tr("Add"), evernoteContextMenuStack);
+	evernoteStackAddAction->setIcon(context->awesome->icon(fa::plus));
+	evernoteStackRefreshAction = new QAction(tr("Refresh"), evernoteContextMenuStack);
+	evernoteStackRefreshAction->setIcon(context->awesome->icon(fa::refresh));
+	evernoteContextMenuStack->addAction(evernoteStackAddAction);
+	evernoteContextMenuStack->addAction(evernoteStackRefreshAction);
+	connect(evernoteStackAddAction, SIGNAL(triggered()), this, SLOT(evernoteContextAdd()));
+	connect(evernoteStackRefreshAction, SIGNAL(triggered()), this, SLOT(evernoteContextRefresh()));
+
 	connect(evernoteTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(evernoteContextMenuRequest(const QPoint &)));
+	//-------------------Note Context Menu------------------------------------
 
 	evernoteModel = new NoteModel;
 	workbenchTree = new QTreeView;
@@ -237,7 +267,20 @@ void MainWindow::evernoteContextMenuRequest(const QPoint &point)
 		return;
 	qDebug() << "[DEBUG] MainWindow::evernoteContextMenuRequest row(" << index.row() << ")";
 	evernoteTree->setCurrentIndex(index);
-	evernoteContextMenu->exec(evernoteTree->mapToGlobal(point));
+
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	if (item->type == TYPE_STACK)
+	{
+		evernoteContextMenuStack->exec(evernoteTree->mapToGlobal(point));
+	}
+	else if (item->type == TYPE_NOTEBOOK)
+	{
+		evernoteContextMenuNotebook->exec(evernoteTree->mapToGlobal(point));
+	}
+	else if (item->type == TYPE_NOTE)
+	{
+		evernoteContextMenuNote->exec(evernoteTree->mapToGlobal(point));
+	}
 }
 
 void MainWindow::evernoteContextUpload()
@@ -252,6 +295,27 @@ void MainWindow::evernoteContextDownload()
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
 	qDebug() << "[DEBUG] MainWindow::evernoteContextDownload name(" << item->name << ")";
+}
+
+void MainWindow::evernoteContextOpen()
+{
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextOpen name(" << item->name << ")";
+}
+
+void MainWindow::evernoteContextAdd()
+{
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextAdd name(" << item->name << ")";
+}
+
+void MainWindow::evernoteContextRefresh()
+{
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextRefresh name(" << item->name << ")";
 }
 
 void MainWindow::evernoteContextDelete()

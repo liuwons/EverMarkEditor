@@ -32,6 +32,9 @@ public slots:
 	void evernoteContextMenuRequest(const QPoint &point);
 	void evernoteContextUpload();
 	void evernoteContextDownload();
+	void evernoteContextOpen();
+	void evernoteContextAdd();
+	void evernoteContextRefresh();
 	void evernoteContextDelete();
 
 	// From Menu Bar
@@ -82,10 +85,23 @@ private:
 	QDockWidget* dockLocalNavigation;
 	QDockWidget* dockRemoteNavigation;
 
-	QMenu* evernoteContextMenu;
-	QAction* evernoteUploadAction;
-	QAction* evernoteDownloadAction;
-	QAction* evernoteDeleteAction;
+	//---------------------Context Menu---------------------
+	QMenu* evernoteContextMenuStack;
+	QAction* evernoteStackRefreshAction;
+	QAction* evernoteStackAddAction;
+
+	QMenu* evernoteContextMenuNotebook;
+	QAction* evernoteNotebookRefreshAction;
+	QAction* evernoteNotebookAddAction;
+
+	QMenu* evernoteContextMenuNote;
+	QAction* evernoteNoteUploadAction;
+	QAction* evernoteNoteDownloadAction;
+	QAction* evernoteNoteOpenAction;
+	QAction* evernoteNoteDeleteAction;
+	//---------------------Context Menu-----------------------
+
+
 
 	// ----------------------Menu Bar-------------------------
 	QMenuBar*  menubar;
