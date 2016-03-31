@@ -30,7 +30,9 @@ public slots:
 	void loadFile(QString fpath);
 	void loadNote(QString guid);
 	void evernoteContextMenuRequest(const QPoint &point);
-	void evernoteContextSync();
+	void evernoteContextUpload();
+	void evernoteContextDownload();
+	void evernoteContextDelete();
 
 	// From Menu Bar
 	void openFileFromMenu();
@@ -81,7 +83,8 @@ private:
 	QDockWidget* dockRemoteNavigation;
 
 	QMenu* evernoteContextMenu;
-	QAction* evernoteSyncAction;
+	QAction* evernoteUploadAction;
+	QAction* evernoteDownloadAction;
 	QAction* evernoteDeleteAction;
 
 	// ----------------------Menu Bar-------------------------

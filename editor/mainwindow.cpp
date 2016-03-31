@@ -94,13 +94,18 @@ void MainWindow::createNavigation()
 	evernoteTree = new QTreeView;
 	evernoteTree->setContextMenuPolicy(Qt::CustomContextMenu);
 	evernoteContextMenu = new QMenu(evernoteTree);
-	evernoteSyncAction = new QAction(tr("Sync"), evernoteContextMenu);
-	evernoteSyncAction->setIcon(AppContext::getContext()->awesome->icon(fa::cloudupload));
+	evernoteUploadAction = new QAction(tr("Upload"), evernoteContextMenu);
+	evernoteUploadAction->setIcon(AppContext::getContext()->awesome->icon(fa::cloudupload));
+	evernoteDownloadAction = new QAction(tr("Download"), evernoteContextMenu);
+	evernoteDownloadAction->setIcon(AppContext::getContext()->awesome->icon(fa::clouddownload));
 	evernoteDeleteAction = new QAction(tr("Delete"), evernoteContextMenu);
 	evernoteDeleteAction->setIcon(AppContext::getContext()->awesome->icon(fa::close));
-	evernoteContextMenu->addAction(evernoteSyncAction);
+	evernoteContextMenu->addAction(evernoteUploadAction);
+	evernoteContextMenu->addAction(evernoteDownloadAction);
 	evernoteContextMenu->addAction(evernoteDeleteAction);
-	connect(evernoteSyncAction, SIGNAL(triggered()), this, SLOT(evernoteContextSync()));
+	connect(evernoteUploadAction, SIGNAL(triggered()), this, SLOT(evernoteContextUpload()));
+	connect(evernoteDownloadAction, SIGNAL(triggered()), this, SLOT(evernoteContextDownload()));
+	connect(evernoteDeleteAction, SIGNAL(triggered()), this, SLOT(evernoteContextDelete()));
 	connect(evernoteTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(evernoteContextMenuRequest(const QPoint &)));
 
 	evernoteModel = new NoteModel;
@@ -231,12 +236,29 @@ void MainWindow::evernoteContextMenuRequest(const QPoint &point)
 	if (!index.isValid())
 		return;
 	qDebug() << "[DEBUG] MainWindow::evernoteContextMenuRequest row(" << index.row() << ")";
+	evernoteTree->setCurrentIndex(index);
 	evernoteContextMenu->exec(evernoteTree->mapToGlobal(point));
 }
 
-void MainWindow::evernoteContextSync()
+void MainWindow::evernoteContextUpload()
 {
-	qDebug() << "[DEBUG] MainWindow::evernoteContextSync";
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextUpload name(" << item->name << ")";
+}
+
+void MainWindow::evernoteContextDownload()
+{
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextDownload name(" << item->name << ")";
+}
+
+void MainWindow::evernoteContextDelete()
+{
+	QModelIndex index = evernoteTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "[DEBUG] MainWindow::evernoteContextDelete name(" << item->name << ")";
 }
 
 void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
