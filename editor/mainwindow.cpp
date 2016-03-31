@@ -63,7 +63,6 @@ void MainWindow::createUI()
 
 void MainWindow::updateEvernoteNavigation()
 {
-
 	AppContext* context = AppContext::getContext();
 	if (!context->evernoteManager || !context->evernoteManager->logined())
 	{

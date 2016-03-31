@@ -3,6 +3,7 @@
 
 #include "heodown/html.h"
 
+#include <QUrl>
 #include <QTimer>
 #include <QWidget>
 #include <QWebView>
@@ -27,6 +28,7 @@ public slots:
 	void updateHtmlContent(QString html);
 	void refresh();
 	void loadCSS();
+	void openUrl(const QUrl&);
 
 private:
 	QString themelize(QString html);

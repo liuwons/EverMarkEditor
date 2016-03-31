@@ -5,8 +5,9 @@
 #include "tool/appcontext.h"
 
 #include <QSize>
-#include <QFile.h>
+#include <QFile>
 #include <QDebug>
+#include <QDesktopServices>
 
 Preview::Preview(QSize sz)
 {
@@ -24,6 +25,9 @@ Preview::Preview(QSize sz)
 	mainLayout = new QVBoxLayout;
 
 	webView = new QWebView;
+	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
+	connect(webView, SIGNAL(linkClicked(const QUrl&)), this, SLOT(openUrl(const QUrl&)));
 	mainLayout->addWidget(webView);
 	this->setLayout(mainLayout);
 
@@ -121,4 +125,10 @@ void Preview::refresh()
 		needRefresh = false;
 	}
 	
+}
+
+void Preview::openUrl(const QUrl& url)
+{
+	qDebug() << "[DEBUG] Preview::openUrl url(" << url.toString() << ")";
+	QDesktopServices::openUrl(url);
 }
