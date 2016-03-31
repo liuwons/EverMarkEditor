@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 	createStatusBar();
 	createNavigation();
 	updateEvernoteNavigation();
+	updateWorkbenchNavigation();
 }
 
 MainWindow::~MainWindow()
@@ -79,6 +80,26 @@ void MainWindow::updateEvernoteNavigation()
 	evernoteTree->setModel(evernoteModel);
 }
 
+void MainWindow::updateWorkbenchNavigation()
+{
+	qDebug() << "[DEBUG] MainWindow::updateWorkbenchNavigation start";
+	AppContext* context = AppContext::getContext();
+	if (!context->workbenchManager)
+	{
+		qDebug() << "[ERROR] MainWindow updateWorkbenchNavigation workbenchManager not inited";
+		return;
+	}
+
+	bool load = workbenchModel->loadFromWorkbenchManager(context->workbenchManager);
+	if (!load)
+	{
+		qDebug() << "[ERROR] MainWindow updateWorkbenchNavigation loadFromWorkbenchManager failed";
+		return;
+	}
+	workbenchTree->setModel(workbenchModel);
+	qDebug() << "[DEBUG] MainWindow::updateWorkbenchNavigation end";
+}
+
 void MainWindow::createNavigation()
 {
 	AppContext* context = AppContext::getContext();
@@ -94,6 +115,7 @@ void MainWindow::createNavigation()
 
 	evernoteTree = new QTreeView;
 	evernoteTree->setContextMenuPolicy(Qt::CustomContextMenu);
+	evernoteModel = new NoteModel;
 
 	//--------------------Note Context Menu--------------------------------
 	evernoteContextMenuNote = new QMenu(evernoteTree);
@@ -137,8 +159,8 @@ void MainWindow::createNavigation()
 	connect(evernoteTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(evernoteContextMenuRequest(const QPoint &)));
 	//-------------------Note Context Menu------------------------------------
 
-	evernoteModel = new NoteModel;
 	workbenchTree = new QTreeView;
+	workbenchModel = new NoteModel;
 
 	QTabWidget* tab = new QTabWidget;
 	tab->setTabPosition(QTabWidget::South);

@@ -56,7 +56,7 @@ void init()
 	{
 		QString homePath = QDir::homePath();
 		context->workbenchPath = new QString(homePath + "/evermark");
-		context->settings->setValue(CONFIG_STRING_WORKBENCH_PATH, homePath + *context->workbenchPath);
+		context->settings->setValue(CONFIG_STRING_WORKBENCH_PATH, *context->workbenchPath);
 		qDebug() << "[INFO] set workbench path: " << *context->workbenchPath;
 	}
 
@@ -91,6 +91,9 @@ void init()
 	}
 
 	context->settings->sync();
+
+	context->workbenchManager = new WorkbenchManager;
+	context->workbenchManager->init(*context->workbenchPath);
 
 
 	if (!context->evernoteToken)

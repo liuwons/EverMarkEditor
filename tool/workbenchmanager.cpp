@@ -22,6 +22,7 @@ WorkbenchManager::~WorkbenchManager()
 // Init from a path, load dump file if there is one, or init an empty hierarchy 
 bool WorkbenchManager::init(QString workbenchPath)
 {
+	qDebug() << "[DEBUG] WorkbenchManager::init workbenchPath(" << workbenchPath << ")";
 	QDir dir(workbenchPath);
 	if (!dir.exists())
 		return false;
@@ -51,12 +52,20 @@ bool WorkbenchManager::init(QString workbenchPath)
 	}
 
 	root = new NoteItem;
+	root->name = QObject::tr("workbench");
 	root->type = TYPE_ROOT;
 
 	path = workbenchPath;
 
 	inited = true;
 	return true;
+}
+
+QString WorkbenchManager::toString()
+{
+	if (!root)
+		return QString("{}");
+	return root->toJsonString();
 }
 
 // Dump workbench information to a file in the workbench directory

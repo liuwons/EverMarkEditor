@@ -40,6 +40,8 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const
 			return context->awesome->icon(fa::book);
 		else if (item->type == TYPE_STACK)
 			return context->awesome->icon(fa::folder);
+		else if (item->type == TYPE_ROOT)
+			return context->awesome->icon(fa::home);
 	}
 	else if (role == Qt::DisplayRole)
 	{
@@ -75,21 +77,23 @@ QVariant NoteModel::headerData(int section, Qt::Orientation orientation,int role
 
 QModelIndex NoteModel::index(int row, int column, const QModelIndex &parent) const
 {
-	if (!hasIndex(row, column, parent))
+	if (row < 0 || column < 0)
 		return QModelIndex();
-
-	NoteItem *parentItem;
 
 	if (!parent.isValid())
-		parentItem = root;
+	{
+		return createIndex(row, column, root);
+	}
 	else
+	{
+		NoteItem *parentItem;
 		parentItem = static_cast<NoteItem*>(parent.internalPointer());
-
-	NoteItem *childItem = parentItem->childs.at(row);
-	if (childItem)
-		return createIndex(row, column, childItem);
-	else
-		return QModelIndex();
+		NoteItem *childItem = parentItem->childs.at(row);
+		if (childItem)
+			return createIndex(row, column, childItem);
+		else
+			return QModelIndex();
+	}
 }
 
 QModelIndex NoteModel::parent(const QModelIndex &index) const
@@ -120,16 +124,14 @@ QModelIndex NoteModel::parent(const QModelIndex &index) const
 
 int NoteModel::rowCount(const QModelIndex &parent) const
 {
-	NoteItem *parentItem;
-	if (parent.column() > 0)
-		return 0;
-
 	if (!parent.isValid())
-		parentItem = root;
+		return 1;
 	else
+	{
+		NoteItem *parentItem;
 		parentItem = static_cast<NoteItem*>(parent.internalPointer());
-
-	return parentItem->childs.size();
+		return parentItem->childs.size();
+	}
 }
 
 bool NoteModel::loadFromEvernoteManager(EvernoteManager* manager)
@@ -149,5 +151,17 @@ bool NoteModel::loadFromEvernoteManager(EvernoteManager* manager)
 
 	root = NoteItem::fromEvernoteStatus(notebookStatus, noteStatus);
 	
+	return true;
+}
+
+bool NoteModel::loadFromWorkbenchManager(WorkbenchManager* manager)
+{
+	if (!manager)
+		return false;
+
+	QString strJson = manager->toString();
+	qDebug() << "[DEBUG] NoteModel::loadFromWorkbenchManager json: " << strJson;
+	header.append(tr("Workbench"));
+	root = NoteItem::fromJsonString(strJson);
 	return true;
 }

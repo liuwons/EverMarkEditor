@@ -2,6 +2,7 @@
 #define EVERNOTE_MODEL_H
 
 #include "evernotemanager.h"
+#include "workbenchmanager.h"
 #include "noteitem.h"
 
 #include <QAbstractItemModel>
@@ -25,6 +26,7 @@ public:
 	int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
 	bool loadFromEvernoteManager(EvernoteManager* manager);
+	bool loadFromWorkbenchManager(WorkbenchManager* manager);
 
 private:
 	NoteItem* root;

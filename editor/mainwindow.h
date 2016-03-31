@@ -56,6 +56,7 @@ public slots:
 	void openNoteFromEvernoteNavigation(const QModelIndex& index);
 
 	void updateEvernoteNavigation();
+	void updateWorkbenchNavigation();
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -73,6 +74,7 @@ private:
 	QTreeView* evernoteTree;
 	QFileSystemModel* localFileModel;
 	QTreeView* localFileTree;
+	NoteModel* workbenchModel;
 	QTreeView* workbenchTree;
 	QString currentFilePath;
 
