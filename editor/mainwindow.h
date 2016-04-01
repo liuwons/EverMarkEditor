@@ -55,6 +55,7 @@ public slots:
 	void about();
 	void help();
 	void setting();
+	void close();
 
 	// From Tool Bar
 	void previewNow();

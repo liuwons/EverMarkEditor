@@ -549,7 +549,7 @@ void MainWindow::saveAsFromMenu()
 
 void MainWindow::closeFromMenu()
 {
-
+	close();
 }
 
 void MainWindow::previewView()
@@ -617,7 +617,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
 	}
 }
 
-void MainWindow::closeEvent(QCloseEvent *e)
+void MainWindow::close()
 {
 	QMessageBox msgBox;
 	msgBox.setWindowIcon(AppContext::getContext()->awesome->icon(fa::warning));
@@ -637,4 +637,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
 		// should never be reached
 		break;
 	}
+}
+
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+	close();
 }
