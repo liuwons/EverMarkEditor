@@ -29,13 +29,19 @@ public:
 public slots:
 	void loadFile(QString fpath);
 	void loadNote(QString guid);
-	void evernoteContextMenuRequest(const QPoint &point);
+	void evernoteContextMenuRequest(const QPoint& point);
 	void evernoteContextUpload();
 	void evernoteContextDownload();
 	void evernoteContextOpen();
 	void evernoteContextAdd();
 	void evernoteContextRefresh();
 	void evernoteContextDelete();
+
+	void workbenchContextMenuRequest(const QPoint& point);
+	void workbenchContextAdd();
+	void workbenchContextAddStack();
+	void workbenchContextDelete();
+	void workbenchContextOpen();
 
 	// From Menu Bar
 	void openFileFromMenu();
@@ -54,6 +60,7 @@ public slots:
 	void previewNow();
 	void openFileFromLocalNavigation(const QModelIndex & index);
 	void openNoteFromEvernoteNavigation(const QModelIndex& index);
+	void openNoteFromWorkbenchNavigation(const QModelIndex& index);
 
 	void updateEvernoteNavigation();
 	void updateWorkbenchNavigation();
@@ -87,7 +94,7 @@ private:
 	QDockWidget* dockLocalNavigation;
 	QDockWidget* dockRemoteNavigation;
 
-	//---------------------Context Menu---------------------
+	//---------------------Evernote Context Menu---------------------
 	QMenu* evernoteContextMenuStack;
 	QAction* evernoteStackRefreshAction;
 	QAction* evernoteStackAddAction;
@@ -101,7 +108,26 @@ private:
 	QAction* evernoteNoteDownloadAction;
 	QAction* evernoteNoteOpenAction;
 	QAction* evernoteNoteDeleteAction;
-	//---------------------Context Menu-----------------------
+	//---------------------Evernote Context Menu-----------------------
+
+
+
+	//---------------------Workbench Context Menu----------------------
+	QMenu* workbenchContextMenuRoot;
+	QAction* workbenchRootAddStackAction;
+	QAction* workbenchRootAddNotebookAction;
+
+	QMenu* workbenchContextMenuStack;
+	QAction* workbenchStackAddAction;
+	
+	QMenu* workbenchContextMenuNotebook;
+	QAction* workbenchNotebookAddAction;
+	QAction* workbenchNotebookDeleteAction;
+
+	QMenu* workbenchContextMenuNote;
+	QAction* workbenchNoteOpenAction;
+	QAction* workbenchNoteDeleteAction;
+	//---------------------Workbench Context Menu----------------------
 
 
 

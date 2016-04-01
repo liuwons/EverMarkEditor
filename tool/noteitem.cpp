@@ -41,7 +41,6 @@ QJsonObject NoteItem::toJsonObject()
 
 NoteItem* NoteItem::fromJsonObject(QJsonObject obj)
 {
-	qDebug() << "[DEBUG] NoteItem::fromJsonObject start";
 	NoteItem* item = new NoteItem;
 	item->id = obj.value(NOTE_KEY_NAME_ID).toString();
 	item->type = static_cast<NoteType>(obj.value(NOTE_KEY_NAME_TYPE).toInt());
@@ -56,8 +55,6 @@ NoteItem* NoteItem::fromJsonObject(QJsonObject obj)
 		item->childs.append(itemChild);
 		itemChild->parent = item;
 	}
-
-	qDebug() << "[DEBUG] NoteItem::fromJsonObject end";
 	return item;
 }
 

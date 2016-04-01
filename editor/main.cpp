@@ -19,7 +19,7 @@ void setStyle()
 	QFile file("theme.css");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		qDebug() << "ERROR: read file failed: " << "theme.css";
+		qWarning() << "read file failed: " << "theme.css";
 		return;
 	}
 
@@ -50,44 +50,44 @@ void init()
 	if (context->settings->contains(CONFIG_STRING_WORKBENCH_PATH))
 	{
 		context->workbenchPath = new QString(context->settings->value(CONFIG_STRING_WORKBENCH_PATH).toString());
-		qDebug() << "[INFO] load workbench path: " << *context->workbenchPath;
+		qInfo() << "Load workbench path: " << *context->workbenchPath;
 	}
 	else    // Set default workbench path as ~/evermark
 	{
 		QString homePath = QDir::homePath();
 		context->workbenchPath = new QString(homePath + "/evermark");
 		context->settings->setValue(CONFIG_STRING_WORKBENCH_PATH, *context->workbenchPath);
-		qDebug() << "[INFO] set workbench path: " << *context->workbenchPath;
+		qInfo() << "Set workbench path: " << *context->workbenchPath;
 	}
 
 	if (AppContext::getContext()->settings->contains(CONFIG_STRING_EVERNOTE_TOKEN))
 	{
 		context->evernoteToken = new QString(context->settings->value(CONFIG_STRING_EVERNOTE_TOKEN).toString());
-		qDebug() << "[INFO] load evernote token: " << *context->evernoteToken;
+		qInfo() << "Load evernote token: " << *context->evernoteToken;
 	}
 
 	if (context->settings->contains(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE))
 	{
 		context->evernoteAccountType = new QString(context->settings->value(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE).toString());
-		qDebug() << "[INFO] load evernote account type: " << *context->evernoteAccountType;
+		qInfo() << "Load evernote account type: " << *context->evernoteAccountType;
 	}
 	else    // Set default Account Type
 	{
 		context->evernoteAccountType = new QString("yinxiang");
 		context->settings->setValue(CONFIG_STRING_EVERNOTE_ACCOUNT_TYPE, *context->evernoteAccountType);
-		qDebug() << "[INFO] set evernote account type: " << *context->evernoteAccountType;
+		qInfo() << "Set evernote account type: " << *context->evernoteAccountType;
 	}
 
 	if (context->settings->contains(CONFIG_STRING_MARKDOWN_THEME))
 	{
 		context->markdownTheme = new QString(context->settings->value(CONFIG_STRING_MARKDOWN_THEME).toString());
-		qDebug() << "[INFO] load markdown theme: " << *context->markdownTheme;
+		qInfo() << "Load markdown theme: " << *context->markdownTheme;
 	}
 	else    // Set default Theme
 	{
 		context->markdownTheme = new QString("github");
 		context->settings->setValue(CONFIG_STRING_MARKDOWN_THEME, *context->markdownTheme);
-		qDebug() << "[INFO] set markdown theme: " << *context->markdownTheme;
+		qInfo() << "Set markdown theme: " << *context->markdownTheme;
 	}
 
 	context->settings->sync();
@@ -112,25 +112,27 @@ void init()
 		QString("sync"));
 	if (!context->evernoteManager->init())
 	{
-		qDebug() << "[ERROR] EvernoteManager init failed";
+		qWarning() << "EvernoteManager init failed";
 		delete context->evernoteManager;
 		context->evernoteManager = 0;
 		return;
 	}
 	if (!context->evernoteManager->login())
 	{
-		qDebug() << "[ERROR] EvernoteManager login failed";
+		qWarning() << "EvernoteManager login failed";
 		delete context->evernoteManager;
 		context->evernoteManager = 0;
 		return;
 	}
-	qDebug() << "[DEBUG] EvernoteManager login succeed";
+	qInfo() << "EvernoteManager login succeed";
 }
 
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
+
+	qSetMessagePattern("[%{type}] %{time [yyyy-MM-dd HH:mm:ss]} (%{function}, %{file}:%{line}) - %{message}");
 
 	AppContext* context = AppContext::getContext();
 	context->appDir = a.applicationDirPath();

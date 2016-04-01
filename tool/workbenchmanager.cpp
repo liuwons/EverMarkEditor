@@ -22,7 +22,7 @@ WorkbenchManager::~WorkbenchManager()
 // Init from a path, load dump file if there is one, or init an empty hierarchy 
 bool WorkbenchManager::init(QString workbenchPath)
 {
-	qDebug() << "[DEBUG] WorkbenchManager::init workbenchPath(" << workbenchPath << ")";
+	qDebug() << "init workbenchPath(" << workbenchPath << ")";
 	QDir dir(workbenchPath);
 	if (!dir.exists())
 		return false;
@@ -37,7 +37,7 @@ bool WorkbenchManager::init(QString workbenchPath)
 			QFile file(fpath);
 			if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 			{
-				qDebug() << "ERROR: read file failed: " << fpath;
+				qWarning() << "read file failed: " << fpath;
 				return false;
 			}
 			QString content = file.readAll();
@@ -88,7 +88,7 @@ bool WorkbenchManager::dump()
 			QFile file(fpath);
 			if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
 			{
-				qDebug() << "ERROR: open file failed: " << fpath;
+				qWarning() << "open file failed: " << fpath;
 				return false;
 			}
 			QString content = root->toJsonString();
@@ -161,10 +161,11 @@ bool WorkbenchManager::flushNote(QString guid, QString content)
 	if (!inited)
 		return false;
 	QString fpath = getNoteFilePath(guid);
+	qDebug() << "Note file path: " << fpath;
 	QFile file(fpath);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		qDebug() << "ERROR: open file failed: " << "theme.css";
+		qWarning() << "open file failed: " << "theme.css";
 		return false;
 	}
 

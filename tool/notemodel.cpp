@@ -160,7 +160,7 @@ bool NoteModel::loadFromWorkbenchManager(WorkbenchManager* manager)
 		return false;
 
 	QString strJson = manager->toString();
-	qDebug() << "[DEBUG] NoteModel::loadFromWorkbenchManager json: " << strJson;
+	qDebug() << "loadFromWorkbenchManager json: " << strJson;
 	header.append(tr("Workbench"));
 	root = NoteItem::fromJsonString(strJson);
 	return true;

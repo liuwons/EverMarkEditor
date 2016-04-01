@@ -67,14 +67,14 @@ void MainWindow::updateEvernoteNavigation()
 	AppContext* context = AppContext::getContext();
 	if (!context->evernoteManager || !context->evernoteManager->logined())
 	{
-		qDebug() << "[ERROR] MainWindow updateEvernoteNavigation evernoteManager not logined";
+		qWarning() << "EvernoteManager not logined";
 		return;
 	}
 	
 	bool load = evernoteModel->loadFromEvernoteManager(context->evernoteManager);
 	if (!load)
 	{
-		qDebug() << "[ERROR] MainWindow updateEvernoteNavigation loadFromEvernoteManager failed";
+		qWarning() << "Load EvernoteModel failed";
 		return;
 	}
 	evernoteTree->setModel(evernoteModel);
@@ -82,22 +82,22 @@ void MainWindow::updateEvernoteNavigation()
 
 void MainWindow::updateWorkbenchNavigation()
 {
-	qDebug() << "[DEBUG] MainWindow::updateWorkbenchNavigation start";
+	qDebug() << "Start";
 	AppContext* context = AppContext::getContext();
 	if (!context->workbenchManager)
 	{
-		qDebug() << "[ERROR] MainWindow updateWorkbenchNavigation workbenchManager not inited";
+		qWarning() << "WorkbenchManager not inited";
 		return;
 	}
 
 	bool load = workbenchModel->loadFromWorkbenchManager(context->workbenchManager);
 	if (!load)
 	{
-		qDebug() << "[ERROR] MainWindow updateWorkbenchNavigation loadFromWorkbenchManager failed";
+		qWarning() << "Load WorkbenchModel failed";
 		return;
 	}
 	workbenchTree->setModel(workbenchModel);
-	qDebug() << "[DEBUG] MainWindow::updateWorkbenchNavigation end";
+	qDebug() << "End";
 }
 
 void MainWindow::createNavigation()
@@ -117,7 +117,7 @@ void MainWindow::createNavigation()
 	evernoteTree->setContextMenuPolicy(Qt::CustomContextMenu);
 	evernoteModel = new NoteModel;
 
-	//--------------------Note Context Menu--------------------------------
+	//--------------------Evernote Context Menu--------------------------------
 	evernoteContextMenuNote = new QMenu(evernoteTree);
 	evernoteNoteOpenAction = new QAction(tr("Open"), evernoteContextMenuNote);
 	evernoteNoteOpenAction->setIcon(context->awesome->icon(fa::pencil));
@@ -157,10 +157,52 @@ void MainWindow::createNavigation()
 	connect(evernoteStackRefreshAction, SIGNAL(triggered()), this, SLOT(evernoteContextRefresh()));
 
 	connect(evernoteTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(evernoteContextMenuRequest(const QPoint &)));
-	//-------------------Note Context Menu------------------------------------
+	//-------------------Evernote Context Menu------------------------------------
+
 
 	workbenchTree = new QTreeView;
+	workbenchTree->setContextMenuPolicy(Qt::CustomContextMenu);
 	workbenchModel = new NoteModel;
+	//-------------------Workbench Context Menu-----------------------------------
+	workbenchContextMenuRoot = new QMenu(workbenchTree);
+	workbenchRootAddStackAction = new QAction(tr("Add Stack"), workbenchContextMenuRoot);
+	workbenchRootAddStackAction->setIcon(context->awesome->icon(fa::plus));
+	workbenchRootAddNotebookAction = new QAction(tr("Add Notebook"), workbenchContextMenuRoot);
+	workbenchRootAddNotebookAction->setIcon(context->awesome->icon(fa::plus));
+	workbenchContextMenuRoot->addAction(workbenchRootAddStackAction);
+	workbenchContextMenuRoot->addAction(workbenchRootAddNotebookAction);
+	connect(workbenchRootAddStackAction, SIGNAL(triggered()), this, SLOT(workbenchContextAddStack()));
+	connect(workbenchRootAddNotebookAction, SIGNAL(triggered()), this, SLOT(workbenchContextAdd()));
+
+	workbenchContextMenuStack = new QMenu(workbenchTree);
+	workbenchStackAddAction = new QAction(tr("Add Notebook"), workbenchContextMenuStack);
+	workbenchStackAddAction->setIcon(context->awesome->icon(fa::plus));
+	workbenchContextMenuStack->addAction(workbenchStackAddAction);
+	connect(workbenchStackAddAction, SIGNAL(triggered()), this, SLOT(workbenchContextAdd()));
+
+	workbenchContextMenuNotebook = new QMenu(workbenchTree);
+	workbenchNotebookAddAction = new QAction(tr("Add Note"), workbenchContextMenuNotebook);
+	workbenchNotebookAddAction->setIcon(context->awesome->icon(fa::plus));
+	workbenchNotebookDeleteAction = new QAction(tr("Delete Notebook"), workbenchContextMenuNotebook);
+	workbenchNotebookDeleteAction->setIcon(context->awesome->icon(fa::close));
+	workbenchContextMenuNotebook->addAction(workbenchNotebookAddAction);
+	workbenchContextMenuNotebook->addAction(workbenchNotebookDeleteAction);
+	connect(workbenchNotebookAddAction, SIGNAL(triggered()), this, SLOT(workbenchContextAdd()));
+	connect(workbenchNotebookDeleteAction, SIGNAL(triggered()), this, SLOT(workbenchContextDelete()));
+
+	workbenchContextMenuNote = new QMenu(workbenchTree);
+	workbenchNoteOpenAction = new QAction(tr("Open Note"), workbenchContextMenuNote);
+	workbenchNoteOpenAction->setIcon(context->awesome->icon(fa::pencil));
+	workbenchNoteDeleteAction = new QAction(tr("Delete Note"), workbenchContextMenuNote);
+	workbenchNoteDeleteAction->setIcon(context->awesome->icon(fa::close));
+	workbenchContextMenuNote->addAction(workbenchNoteOpenAction);
+	workbenchContextMenuNote->addAction(workbenchNoteDeleteAction);
+	connect(workbenchNoteOpenAction, SIGNAL(triggered()), this, SLOT(workbenchContextOpen()));
+	connect(workbenchNoteDeleteAction, SIGNAL(triggered()), this, SLOT(workbenchContextDelete()));
+
+	connect(workbenchTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(workbenchContextMenuRequest(const QPoint &)));
+	//-------------------Workbench Context Menu-----------------------------------
+	
 
 	QTabWidget* tab = new QTabWidget;
 	tab->setTabPosition(QTabWidget::South);
@@ -183,6 +225,7 @@ void MainWindow::createNavigation()
 
 	connect(localFileTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openFileFromLocalNavigation(const QModelIndex &)));
 	connect(evernoteTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openNoteFromEvernoteNavigation(const QModelIndex &)));
+	connect(workbenchTree, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openNoteFromWorkbenchNavigation(const QModelIndex &)));
 }
 
 
@@ -281,12 +324,69 @@ void MainWindow::createStatusBar()
 	statusbar->addWidget(lbPosition, 1);
 }
 
+
+void MainWindow::workbenchContextMenuRequest(const QPoint &point)
+{
+	QModelIndex index = workbenchTree->indexAt(point);
+	if (!index.isValid())
+		return;
+	qDebug() << "Row: " << index.row();
+	workbenchTree->setCurrentIndex(index);
+
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	if (item->type == TYPE_ROOT)
+	{
+		workbenchContextMenuRoot->exec(evernoteTree->mapToGlobal(point));
+	}
+	else if (item->type == TYPE_STACK)
+	{
+		workbenchContextMenuStack->exec(evernoteTree->mapToGlobal(point));
+	}
+	else if (item->type == TYPE_NOTEBOOK)
+	{
+		workbenchContextMenuNotebook->exec(evernoteTree->mapToGlobal(point));
+	}
+	else if (item->type == TYPE_NOTE)
+	{
+		workbenchContextMenuNote->exec(evernoteTree->mapToGlobal(point));
+	}
+}
+
+void MainWindow::workbenchContextOpen()
+{
+	QModelIndex index = workbenchTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "Name: " << item->name;
+}
+
+void MainWindow::workbenchContextAdd()
+{
+	QModelIndex index = workbenchTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "Name: " << item->name;
+}
+
+void MainWindow::workbenchContextAddStack()
+{
+	QModelIndex index = workbenchTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "Name: " << item->name;
+}
+
+void MainWindow::workbenchContextDelete()
+{
+	QModelIndex index = workbenchTree->currentIndex();
+	NoteItem* item = (NoteItem*)index.internalPointer();
+	qDebug() << "Name: " << item->name;
+}
+
+
 void MainWindow::evernoteContextMenuRequest(const QPoint &point)
 {
 	QModelIndex index = evernoteTree->indexAt(point);
 	if (!index.isValid())
 		return;
-	qDebug() << "[DEBUG] MainWindow::evernoteContextMenuRequest row(" << index.row() << ")";
+	qDebug() << "Row: " << index.row();
 	evernoteTree->setCurrentIndex(index);
 
 	NoteItem* item = (NoteItem*)index.internalPointer();
@@ -308,42 +408,42 @@ void MainWindow::evernoteContextUpload()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextUpload name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::evernoteContextDownload()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextDownload name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::evernoteContextOpen()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextOpen name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::evernoteContextAdd()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextAdd name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::evernoteContextRefresh()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextRefresh name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::evernoteContextDelete()
 {
 	QModelIndex index = evernoteTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
-	qDebug() << "[DEBUG] MainWindow::evernoteContextDelete name(" << item->name << ")";
+	qDebug() << "Name: " << item->name;
 }
 
 void MainWindow::openFileFromLocalNavigation(const QModelIndex & index)
@@ -366,10 +466,28 @@ void MainWindow::openNoteFromEvernoteNavigation(const QModelIndex & index)
 		return;
 
 	if (item->name.length() > 0)
-		qDebug() << "[DEBUG] Open note from evernote navigation: " << item->name;
+		qDebug() << "Name: " << item->name;
 
 	QString guid = item->id;
 	loadNote(guid);
+}
+
+void MainWindow::openNoteFromWorkbenchNavigation(const QModelIndex & index)
+{
+	if (!index.isValid())
+		return;
+
+	NoteItem *item = static_cast<NoteItem*>(index.internalPointer());
+	if (!item || item->type != TYPE_NOTE)
+		return;
+
+	if (item->name.length() > 0)
+		qDebug() << "Name: " << item->name;
+
+	AppContext* context = AppContext::getContext();
+	QString guid = item->id;
+	QString noteFilePath = context->workbenchManager->getNoteFilePath(guid);
+	loadFile(noteFilePath);
 }
 
 void MainWindow::loadNote(QString guid)
@@ -377,13 +495,13 @@ void MainWindow::loadNote(QString guid)
 	AppContext* context = AppContext::getContext();
 	if (!context->evernoteManager || !context->evernoteManager->logined())
 	{
-		qDebug() << "[ERROR] MainWindow loadNote failed: EvernoteManager not logined";
+		qWarning() << "EvernoteManager not logined";
 		return;
 	}
 	QString content = context->evernoteManager->getNote(guid);
 	preview->updateHtmlContent(content);
 
-	qDebug() << "[DEBUG] MainWindow loadNote content length: " << content.length();
+	qDebug() << "Content length: " << content.length();
 }
 
 void MainWindow::loadFile(QString fpath)
@@ -391,7 +509,7 @@ void MainWindow::loadFile(QString fpath)
 	QFile file(fpath);
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
 	{
-		qDebug() << "[ERROR] read file failed. " << fpath;
+		qWarning() << "Read file failed: " << fpath;
 		return;
 	}
 

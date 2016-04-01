@@ -15,10 +15,10 @@ public:
 	QString toString();
 	bool createNote(QString stack, QString notebookGuid, QString guid, QString title, QString content);
 	bool updateNote(QString noteGuid, QString content);
+	QString getNoteFilePath(QString guid);
 
 private:
 	bool flushNote(QString guid, QString content);
-	QString getNoteFilePath(QString guid);
 
 	bool inited;
 	QString path;

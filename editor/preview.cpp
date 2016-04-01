@@ -59,7 +59,7 @@ void Preview::loadCSS()
 	QFile f(cssFilePath);
 	if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		qDebug() << "ERROR: read css file failed, " << cssFilePath;
+		qWarning() << "read css file failed, " << cssFilePath;
 		return;
 	}
 
@@ -100,7 +100,7 @@ void Preview::refresh()
 	
 	if (type == MARKDOWN)
 	{
-		qDebug() << "[DEBUG] Render Markdown and refresh preview";
+		qDebug() << "Render Markdown and refresh preview";
 
 		std::string std_str = content.toStdString();
 		const char* cstr = std_str.c_str();
@@ -118,8 +118,8 @@ void Preview::refresh()
 	}
 	else if (type == HTML)
 	{
-		qDebug() << "[DEBUG] Render html and refresh preview";
-		qDebug() << "[DEBUG] content: " << content;
+		qDebug() << "Render html and refresh preview";
+		qDebug() << "content: " << content;
 
 		webView->setHtml(content);
 		needRefresh = false;
@@ -129,6 +129,6 @@ void Preview::refresh()
 
 void Preview::openUrl(const QUrl& url)
 {
-	qDebug() << "[DEBUG] Preview::openUrl url(" << url.toString() << ")";
+	qDebug() << "openUrl url(" << url.toString() << ")";
 	QDesktopServices::openUrl(url);
 }
