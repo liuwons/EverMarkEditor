@@ -569,13 +569,13 @@ void MainWindow::dockedWindow()
 
 void MainWindow::about()
 {
-	QUrl url = QUrl::fromLocalFile("about.txt");
+	QUrl url("https://github.com/liuwons/EverMarkEditor/blob/master/doc/about.md");
 	QDesktopServices::openUrl(url);
 }
 
 void MainWindow::help()
 {
-	QUrl url = QUrl::fromLocalFile("help.txt");
+	QUrl url("https://github.com/liuwons/EverMarkEditor/blob/master/doc/help.md");
 	QDesktopServices::openUrl(url);
 }
 
