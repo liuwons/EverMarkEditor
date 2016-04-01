@@ -82,7 +82,6 @@ void MainWindow::updateEvernoteNavigation()
 
 void MainWindow::updateWorkbenchNavigation()
 {
-	qDebug() << "Start";
 	AppContext* context = AppContext::getContext();
 	if (!context->workbenchManager)
 	{
@@ -97,7 +96,6 @@ void MainWindow::updateWorkbenchNavigation()
 		return;
 	}
 	workbenchTree->setModel(workbenchModel);
-	qDebug() << "End";
 }
 
 void MainWindow::createNavigation()
