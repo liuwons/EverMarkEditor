@@ -361,21 +361,35 @@ void MainWindow::workbenchContextAdd()
 {
 	QModelIndex index = workbenchTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
+	
 	qDebug() << "Name: " << item->name;
+	
+	if (item->type != TYPE_NOTEBOOK)
+		return;
+
+	QString notebookGuid = item->id;
 }
 
 void MainWindow::workbenchContextAddStack()
 {
 	QModelIndex index = workbenchTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
+	
 	qDebug() << "Name: " << item->name;
+
+	if (item->type != TYPE_ROOT)
+		return;
+
 }
 
 void MainWindow::workbenchContextDelete()
 {
 	QModelIndex index = workbenchTree->currentIndex();
 	NoteItem* item = (NoteItem*)index.internalPointer();
+
 	qDebug() << "Name: " << item->name;
+
+
 }
 
 
