@@ -389,7 +389,6 @@ void MainWindow::workbenchContextDelete()
 
 	qDebug() << "Name: " << item->name;
 
-
 }
 
 
