@@ -364,10 +364,20 @@ void MainWindow::workbenchContextAdd()
 	
 	qDebug() << "Name: " << item->name;
 	
-	if (item->type != TYPE_NOTEBOOK)
+	if (item->type != TYPE_NOTEBOOK && item->type != TYPE_STACK)
 		return;
 
-	QString notebookGuid = item->id;
+	if (item->type == TYPE_NOTEBOOK)
+	{
+		QString notebookGuid = item->id;
+		QString notebookName = item->name;
+	}
+	else if (item->type == TYPE_STACK)
+	{
+
+	}
+
+	
 }
 
 void MainWindow::workbenchContextAddStack()
