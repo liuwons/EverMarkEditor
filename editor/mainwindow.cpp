@@ -398,11 +398,11 @@ void MainWindow::workbenchContextDelete()
 
 	if (item->type == TYPE_NOTE)
 	{
-
+		QString noteGuid = item->id;
 	}
 	else if (item->type == TYPE_NOTEBOOK)
 	{
-
+		QString notebookGuid = item->id;
 	}
 }
 
